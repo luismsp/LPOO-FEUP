@@ -23,10 +23,12 @@ public class Game {
 
 	public void cueHit() {
 		double forceMod = getCue().getOffset();
-		V2D force = V2D.subtract(table.getWhiteBall().getPosition(),getCue().getPosition());
-		force.normalize();
-		force.multiply(forceMod);
+		V2D forceToApply = V2D.subtract(table.getWhiteBall().getPosition(),getCue().getPosition());
+		forceToApply.normalize();
+		forceToApply.multiply(forceMod);
+		
 		// TODO
+		table.getWhiteBall().setForce(forceToApply);
 		
 		
 		

@@ -430,8 +430,7 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 	public void calculateRotation(int mX, int mY) {
 		Ball wb = game.getTable().getWhiteBall();
 		int radiusBall = (int) Ball.getRadius();
-		V2D wbC = new V2D(wb.getX() + radiusBall, wb.getY()
-				+ radiusBall);
+		V2D wbC = new V2D(wb.getX(), wb.getY());
 
 		double dx, dy, alpha;
 
