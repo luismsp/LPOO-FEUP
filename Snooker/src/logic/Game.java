@@ -34,9 +34,13 @@ public class Game {
 	
 	public void updatePhysics(float dt) {
 		
+		// local variables
 		Vector<V2D> holes = table.getCloth().getHoles();
 		Vector<Ball> balls = table.getBallSet();
+		double frictionMod = table.getCloth().getFriction();
 		
+		
+		// handling collisions
 		for (int i = 0; i < balls.size(); ++i) {
 			
 			Ball a = balls.get(i);
@@ -53,5 +57,18 @@ public class Game {
 				Collisions.handleBallCollision(a,b);
 			}
 		}
+		
+		// updating force, velocity and position
+		for (Ball a : balls) {
+			
+			a.updateForce(dt, frictionMod);
+			a.updateVelocity(dt);
+			a.updatePosition(dt);
+		}	
 	}
+	
+	
+	
+	
+	
 }
