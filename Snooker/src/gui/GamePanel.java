@@ -14,6 +14,7 @@ import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -26,21 +27,21 @@ import logic.MoveState;
 import logic.V2D;
 
 public class GamePanel extends JPanel implements ActionListener, Runnable,
-		MouseListener, MouseMotionListener, KeyListener {
+MouseListener, MouseMotionListener, KeyListener {
 	private static final long serialVersionUID = 1L;
 
 	private Image cueImage;
 	private List<Image> ballImages = new ArrayList<>();
-	
+
 	private Timer timer;
-	private static final int DESIRED_FPS = 50;
+	private static final int DESIRED_FPS = 65;
 
 	boolean showGame = false;
 
 	private Game game;
 
 	private boolean mouseDown = false;
-	
+
 	private V2D initialWoodPosition;
 	private V2D finalWoodPosition;
 	private V2D initialClothPosition;
@@ -55,7 +56,7 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 	private V2D yellowBallPoint;
 	private V2D pinkBallPoint;
 
-	
+
 	public void loadImages() throws IOException {
 		cueImage = ImageIO.read(this.getClass().getResource("res/cue.png"));
 		ballImages.add(ImageIO.read(this.getClass().getResource("res/whiteBall.png")));
@@ -67,13 +68,13 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 		ballImages.add(ImageIO.read(this.getClass().getResource("res/pinkBall.png")));
 		ballImages.add(ImageIO.read(this.getClass().getResource("res/blackBall.png")));
 	}
-	
+
 	public GamePanel() {
 		setLocation((Utilities.dimScreen.width - getWidth()) / 2,
 				(Utilities.dimScreen.height - getHeight()) / 2);
-		
+
 		game = new Game("Botas", "Luis");
-		
+
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		addKeyListener(this);
@@ -85,7 +86,7 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 
 	public void Init() throws IOException {
 		loadImages();
-		
+
 		InitializeDrawingPoints();
 		InitializeBallsPoints();
 		timer = new Timer(1000 / DESIRED_FPS, (ActionListener) this);
@@ -119,40 +120,40 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 		// Color Balls
 		// Green Ball
 		game.getTable().getBallSet()
-				.get(16)
-				.setPosition(
-						(new V2D(greenBallPoint.getX(),
-								greenBallPoint.getY())));
+		.get(16)
+		.setPosition(
+				(new V2D(greenBallPoint.getX(),
+						greenBallPoint.getY())));
 		// Brown Ball
 		game.getTable().getBallSet()
-				.get(17)
-				.setPosition(
-						(new V2D(brownBallPoint.getX(),
-								brownBallPoint.getY())));
+		.get(17)
+		.setPosition(
+				(new V2D(brownBallPoint.getX(),
+						brownBallPoint.getY())));
 		// Yellor Ball
 		game.getTable().getBallSet()
-				.get(18)
-				.setPosition(
-						(new V2D(yellowBallPoint.getX(),
-								yellowBallPoint.getY())));
+		.get(18)
+		.setPosition(
+				(new V2D(yellowBallPoint.getX(),
+						yellowBallPoint.getY())));
 		// Blue Ball
 		game.getTable().getBallSet()
-				.get(19)
-				.setPosition(
-						(new V2D(blueBallPoint.getX(),
-								blueBallPoint.getY())));
+		.get(19)
+		.setPosition(
+				(new V2D(blueBallPoint.getX(),
+						blueBallPoint.getY())));
 		// Pink Ball
 		game.getTable().getBallSet()
-				.get(20)
-				.setPosition(
-						new V2D(pinkBallPoint.getX(),
-								pinkBallPoint.getY()));
+		.get(20)
+		.setPosition(
+				new V2D(pinkBallPoint.getX(),
+						pinkBallPoint.getY()));
 		// Black Ball
 		game.getTable().getBallSet()
-				.get(21)
-				.setPosition(
-						(new V2D(blackBallPoint.getX(),
-								blackBallPoint.getY())));
+		.get(21)
+		.setPosition(
+				(new V2D(blackBallPoint.getX(),
+						blackBallPoint.getY())));
 	}
 
 	public void InitializeDrawingPoints() {
@@ -178,8 +179,8 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 				.getX() - 100, game.getTable().getCloth().getHeight() / 3 + 80);
 		mediumVertexTriangle = new V2D(game.getTable().getCloth().getWidth() + 40,
 				game.getTable().getCloth().getHeight()
-						- ((game.getTable().getCloth().getHeight() - (game.getTable().getCloth()
-								.getHeight() / 3 + 80)) / 2));
+				- ((game.getTable().getCloth().getHeight() - (game.getTable().getCloth()
+						.getHeight() / 3 + 80)) / 2));
 
 		// Point on Center Table
 		blueBallPoint = new V2D((finalClothPosition.getX() / 2)
@@ -202,7 +203,7 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 				(brownBallPoint.getY() / 2) + initialWoodPosition.getY() + 10);
 		yellowBallPoint = new V2D(brownBallPoint.getX(),
 				brownBallPoint.getY()
-						+ (greenBallPoint.getY() - initialClothPosition.getY()));
+				+ (greenBallPoint.getY() - initialClothPosition.getY()));
 
 		// Cloth Holes
 		// Left Up Hole
@@ -210,7 +211,7 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 				new V2D(initialClothPosition.getX()
 						- Cloth.getHoleRadius(),
 						initialClothPosition.getY()
-								- Cloth.getHoleRadius()));
+						- Cloth.getHoleRadius()));
 		// Left Buttom Hole
 		game.getTable().getCloth().addHole(
 				new V2D(initialClothPosition.getX()
@@ -221,39 +222,39 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 				new V2D(blueBallPoint.getX()
 						- Cloth.getHoleRadius() + 2,
 						initialClothPosition.getY()
-								- Cloth.getHoleRadius() - 10));
+						- Cloth.getHoleRadius() - 10));
 		// Bottom Center Hole
 		game.getTable().getCloth()
-				.addHole(
-						new V2D(
-								blueBallPoint.getX()
-										- Cloth.getHoleRadius() + 2,
-								finalClothPosition.getY()
-										+ ((finalWoodPosition.getY() - finalClothPosition
-												.getY()) / 2)
-										+ (30 - Cloth.getHoleRadius())));
+		.addHole(
+				new V2D(
+						blueBallPoint.getX()
+						- Cloth.getHoleRadius() + 2,
+						finalClothPosition.getY()
+						+ ((finalWoodPosition.getY() - finalClothPosition
+								.getY()) / 2)
+								+ (30 - Cloth.getHoleRadius())));
 		// Right Up Hole
 		game.getTable().getCloth()
-				.addHole(
-						new V2D(
-								finalClothPosition.getX()
-										+ 98
-										- Cloth.getHoleRadius()
-										+ (finalWoodPosition.getX() - finalClothPosition
-												.getX()) / 2,
+		.addHole(
+				new V2D(
+						finalClothPosition.getX()
+						+ 98
+						- Cloth.getHoleRadius()
+						+ (finalWoodPosition.getX() - finalClothPosition
+								.getX()) / 2,
 								initialClothPosition.getY()
-										- Cloth.getHoleRadius()));
+								- Cloth.getHoleRadius()));
 		// Right Buttom Hole
 		game.getTable().getCloth()
-				.addHole(
-						new V2D(
-								finalClothPosition.getX()
-										+ 98
-										- Cloth.getHoleRadius()
-										+ (finalWoodPosition.getX() - finalClothPosition
-												.getX()) / 2,
+		.addHole(
+				new V2D(
+						finalClothPosition.getX()
+						+ 98
+						- Cloth.getHoleRadius()
+						+ (finalWoodPosition.getX() - finalClothPosition
+								.getX()) / 2,
 								finalClothPosition.getY()
-										+ Cloth.getHoleRadius() + 20));
+								+ Cloth.getHoleRadius() + 20));
 
 	}
 
@@ -353,18 +354,18 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 								.getY()) / 2) - 2), 8, 8);
 		g.fillOval((int) brownBallPoint.getX(), (int) (finalClothPosition
 				.getY() + ((finalWoodPosition.getY() - finalClothPosition
-				.getY()) / 2)) + 40, 8, 8);
-		g.fillOval(
-				(int) (finalWoodPosition.getX() - (brownBallPoint.getX() - initialWoodPosition
-						.getX())) + 85,
-				(int) (initialWoodPosition.getY()
-						+ ((initialClothPosition.getY() - initialWoodPosition
-								.getY()) / 2) - 2), 8, 8);
-		g.fillOval(
-				(int) (finalWoodPosition.getX() - (brownBallPoint.getX() - initialWoodPosition
-						.getX())) + 85,
-				(int) (finalClothPosition.getY() + ((finalWoodPosition.getY() - finalClothPosition
 						.getY()) / 2)) + 40, 8, 8);
+		g.fillOval(
+				(int) (finalWoodPosition.getX() - (brownBallPoint.getX() - initialWoodPosition
+						.getX())) + 85,
+						(int) (initialWoodPosition.getY()
+								+ ((initialClothPosition.getY() - initialWoodPosition
+										.getY()) / 2) - 2), 8, 8);
+		g.fillOval(
+				(int) (finalWoodPosition.getX() - (brownBallPoint.getX() - initialWoodPosition
+						.getX())) + 85,
+						(int) (finalClothPosition.getY() + ((finalWoodPosition.getY() - finalClothPosition
+								.getY()) / 2)) + 40, 8, 8);
 
 		// Drawing Border holes
 		g.setColor(Color.BLACK);
@@ -416,10 +417,10 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 		cy = (int) (wbCoords.getY() - cueImage.getHeight(null) / 2);
 
 		game.getCue().setPosition(new V2D(cx + xCorrection, cy + yCorrection + cueImage.getWidth(null)/2));
-		
+
 		g2d.translate(xCorrection, yCorrection);
 		g2d.rotate(rotRad, wbCoords.getX(), wbCoords.getY());
-		
+
 		g2d.drawImage(cueImage, cx, cy, cueImage.getWidth(null), cueImage.getHeight(null),
 				null);
 	}
@@ -428,11 +429,11 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 		// TODO Auto-generated method stub
 		for (int i = 0; i < game.getTable().getBallSet().size(); i++) {
 			int indexColor = game.getTable().getBallSet().get(i).getColor().ordinal();
-			
-			
+
+
 			/*g.fillOval((int) (game.getTable().getBallSet().get(i).getX() - radiusBall), 
 					(int) (game.getTable().getBallSet().get(i).getY() - radiusBall), 2 * (int) radiusBall, 2 * (int) radiusBall);*/
-			
+
 			g.drawImage(ballImages.get(indexColor), (int) (game.getTable().getBallSet().get(i).getX() - radiusBall), 
 					(int) (game.getTable().getBallSet().get(i).getY() - radiusBall), 2 * (int) radiusBall, 2 * (int) radiusBall, null);
 		}
@@ -483,10 +484,10 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 			mouseDown = true;
 			game.getTable().setMoveState(MoveState.START_HIT);
 			break;
-		/*
-		 * case MouseEvent.BUTTON3: game.getTable().setMoveState(MoveState.WAITING_HIT);
-		 * break;
-		 */
+			/*
+			 * case MouseEvent.BUTTON3: game.getTable().setMoveState(MoveState.WAITING_HIT);
+			 * break;
+			 */
 		default:
 			break;
 		}
@@ -495,13 +496,14 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 		game.cueHit();
-		
-		
+
 		mouseDown = false;
 		game.getTable().setMoveState(MoveState.WAITING_HIT);
 		game.getCue().resetOffset();
+		
+		//run();
 	}
 
 	@Override
@@ -537,7 +539,40 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		//final float fps = 100;
+		final float dt = 1 / DESIRED_FPS;
+		float accumulator = 0;
+
+
+		// In units seconds
+		float frameStart = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+
+		// main loop
+		while(true) {
+			final float currentTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+
+			// Store the time elapsed since the last frame began
+			accumulator += currentTime - frameStart;
+
+			// Record the starting of this frame
+			frameStart = currentTime;
+
+			// Avoid spiral of death and clamp dt, thus clamping
+			// how many times the UpdatePhysics can be called in
+			// a single game loop.
+			if(accumulator > 0.2f) 
+				accumulator = 0.2f;
+
+			while(accumulator > dt) {
+				game.updatePhysics(dt);
+				accumulator -= dt;
+			}
+			
+			repaint();
+		}
+
+		//final float alpha = accumulator / dt;
+
 	}
 
 	@Override
@@ -553,9 +588,9 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 			if (game.getCue().getRotation() < 0)
 				game.getCue().setRotation(360);
 			break;
-		/*
-		 * case KeyEvent.VK_S: game.getTable().getWhiteBall().setPosition(newPosition);
-		 */}
+			/*
+			 * case KeyEvent.VK_S: game.getTable().getWhiteBall().setPosition(newPosition);
+			 */}
 		repaint();
 		System.out.println("Cue alpha: " + game.getCue().getRotation());
 	}
