@@ -62,4 +62,50 @@ public class Ball {
 	public void setPotted(boolean potted) { this.potted = potted; }
 
 	public boolean isMoving() { return !velocity.isNull(); }
+	
+	
+	//
+	// other
+	//
+	
+	public void updateForce(double dt, double frictionMod) {
+		
+		V2D f = new V2D(force);
+		f.normalize();
+		f.invertXY();
+		f.multiply(frictionMod);
+		f.multiply(dt);
+		force.add(f);		
+	}
+	
+	public void updateVelocity(double dt) {
+		
+		V2D v = new V2D(force);
+		v.multiply(inv_mass);
+		v.multiply(dt);
+		velocity.add(v);
+	}
+	
+	public void updatePosition(double dt) {
+		
+		V2D x = new V2D(velocity);
+		x.multiply(dt);
+		position.add(x);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

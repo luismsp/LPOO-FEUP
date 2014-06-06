@@ -12,7 +12,7 @@ public class Cloth {
 	private V2D finalPosition;
 	private static int holeRadius;
 	
-	private Vector<V2D> coordHoles = new Vector<V2D>();
+	private Vector<V2D> holes = new Vector<V2D>();
 	
 	public Cloth(double friction, BallColor color, double width, double height, int holeRadius) {
 		this.friction = friction;
@@ -44,12 +44,12 @@ public class Cloth {
 		return holeRadius;
 	}
 	
-	public Vector<V2D> getCoordHoles() {
-		return coordHoles;
+	public Vector<V2D> getHoles() {
+		return holes;
 	}
 	
 	public void addHole(V2D coord) {
-		coordHoles.addElement(coord);
+		holes.addElement(coord);
 	}
 	
 	public void setFriction(double newFriction) {

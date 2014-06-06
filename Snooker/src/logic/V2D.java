@@ -55,6 +55,8 @@ public class V2D {
 	
 	//public static Vector2d add(Vector2d v1, Vector2d v2) { return new Vector2d(v1.x+v2.x,v1.y+v2.y); }
 	
+	public void subtract(V2D v1) { x -= v1.x; y -= v1.y; }
+	
 	public static V2D subtract(V2D v1, V2D v2) { return new V2D(v1.x-v2.x,v1.y-v2.y); }
 	
 	//public static MathVector multiply(MathVector v1, MathVector v2) { return new MathVector(v1.x*v2.x,v1.y*v2.y); }
@@ -66,6 +68,8 @@ public class V2D {
 	public static V2D normalize(V2D v1) { return new V2D(V2D.multiply(v1,1/v1.norm())); }
 	
 	public static V2D invertXY(V2D v1) { return new V2D(-v1.x,-v1.y); }
+	
+	public void invertXY() { x *= -1; y *= -1; }
 	
 	public static V2D invertX(V2D v1) { return new V2D(-v1.x,v1.y); }
 	

@@ -56,32 +56,25 @@ public class Collisions {
 	
 	}
 	
-	public static void handlePotting(Vector<Ball> balls, Vector<V2D> holes) /* "collision with holes" */ {
-		
+	public static void handlePotting(Ball a, Vector<V2D> holes) /* "collision with holes" */ {
+
+		if (a.isPotted())
+			return;
+
 		double r = Ball.getRadius()+Cloth.getHoleRadius();
 		r *= r;
-		
-		for (Ball a : balls) {
-			
-			if (a.isPotted())
-				continue;
-			
-			for (V2D v : holes) {
-				
-				double p1 = a.getX() + v.getX(); p1 *= p1;
-				double p2 = a.getY() + v.getY(); p2 *= p2;
-				
-				if (r < p1+p2) {
-					a.setPotted(true);
-					a.setVelocity(new V2D());
-				}
-			}	
-		}
+
+		for (V2D v : holes) {
+
+			double p1 = a.getX() + v.getX(); p1 *= p1;
+			double p2 = a.getY() + v.getY(); p2 *= p2;
+
+			if (r < p1+p2) {
+				a.setPotted(true);
+				a.setVelocity(new V2D());
+			}
+		}	
 	}
-	
-	
-	
-	
 	
 }
 
