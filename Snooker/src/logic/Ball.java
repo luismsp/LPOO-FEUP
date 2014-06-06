@@ -2,68 +2,64 @@ package logic;
 
 public class Ball {
 
-	private final ColorL color;
+	private final BallColor color;
 	private final int value;
-	private MathVector position;
-	private MathVector velocity = new MathVector();
-	private boolean potted = false;
+	private static double mass = 0.170;
+	private static double inv_mass = 1/mass;
 	private static double radius = 15;
-	private double weight;
-	
-	//
-	
-	public Ball(ColorL color, MathVector position, double weight) {
+	private MVector position = new MVector();
+	private MVector velocity = new MVector();
+	private MVector force = new MVector();
+	private boolean potted = false;
+
+
+	// ------------
+	// constructors
+	// ------------
+
+	public Ball(BallColor color) {
 		this.color = color;
-		this.value = Utils.getValueFromColor(color);
-		this.position = new MathVector(position);
-		this.weight = weight;
+		this.value = BallColor.getValueFromColor(color);
 	}
-  
-	public ColorL getColor() {
-		return color;
-	}
+
 	
-	public MathVector getPosition() {
-		return position;
-	}
+	// -----------------
+	// getters / setters
+	// -----------------
+
+	public BallColor getColor() { return color; }
 	
-	public void setPosition(MathVector newPosition) {
-		this.position = newPosition;
-	}
-	
-	public MathVector getVelocity() {
-		return velocity;
-	}
-	
-	public void setVelocity(MathVector newVelocity) {
-		this.velocity = newVelocity;
-	}
-	
-	public int getValue() {
-		return value;
-	}
-	
-	public double getRadius() {
-		return radius;
-	}
-	
-	public double getWeight() {
-		return weight;
-	}
-	
-	public void setWeight(double newWeight) {
-		this.weight = newWeight;
-	}
-	
-	public boolean isPotted() {
-		return potted;
-	}
-	
-	public double getX() {
-		return position.getX();
-	}
-	
-	public double getY() {
-		return position.getY();
-	}
+	public int getValue() { return value; }
+
+	public MVector getPosition() { return position; }
+
+	public double getX() { return position.getX(); }
+
+	public double getY() { return position.getY(); }
+
+	public void setPosition(MVector position) { this.position = position; }
+
+	public MVector getVelocity() { return velocity; }
+
+	public void setVelocity(MVector velocity) { this.velocity = velocity; }
+
+	public MVector getForce() { return force; }
+
+	public void setForce(MVector force) { this.force = force; }
+
+	public static double getMass() { return mass; }
+
+	public static double getInvMass() { return inv_mass; }
+
+	public static void setMass(double mass) { Ball.mass = mass; Ball.inv_mass = 1/mass; }
+
+	public static double getRadius() { return radius; }
+
+	public static void setRadius(double radius) { Ball.radius = radius; }
+
+	public boolean isPotted() { return potted; }
+
+	public void setPotted(boolean potted) { this.potted = potted; }
+
+	public boolean isMoving() { return !velocity.isNull(); }
 }

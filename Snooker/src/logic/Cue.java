@@ -1,18 +1,24 @@
 package logic;
 
 public class Cue {
+	private static Cue instance;
+	
 	private static int DEFAULT_CUE_OFFSET_INC = 4;
 	
 	private static final int size = 10;
 	private static final int strength = 1000;
 	private static int rotation = 0;
-	private static int MAX_CUE_OFFSET;
+	private static int MAX_CUE_OFFSET = (int) (6 * Ball.getRadius());
 	private static int cueOffset = 0, cueOffsetInc = DEFAULT_CUE_OFFSET_INC;
 
 	//
 
-	public Cue(int maxCueOffset) {
-		Cue.MAX_CUE_OFFSET = maxCueOffset;
+	private Cue() {}
+	
+	public static Cue getInstance() {
+		if (instance == null)
+			return new Cue();
+		return instance;
 	}
 
 	public int getStrength() {

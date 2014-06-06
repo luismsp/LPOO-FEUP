@@ -4,7 +4,8 @@ import java.util.Vector;
 
 public class Table {
 
-	private Cloth cloth = null;
+	private Cloth cloth;
+	private Cue cue;
 	private Vector<Ball> ballSet = new Vector <Ball>();
 	private MoveState stateMove = MoveState.WAITING_HIT;
 
@@ -14,24 +15,26 @@ public class Table {
 		this.ballSet = ballSet;
 	}*/
 
-	public Table(double radius, double ballWeight, double friction, ColorL color, int holeRadius, double width, double height) {
+	public Table(double radius, double friction, BallColor color, int holeRadius, double width, double height) {
 
 		cloth = new Cloth(friction, color, width, height, holeRadius);
 
 		// adding white ball to vector
-		ballSet.addElement(new Ball(ColorL.WHITE, new MathVector(), ballWeight));
+		ballSet.addElement(new Ball(BallColor.WHITE));
 
 		// adding red balls to vector
 		for(int i = 0; i < 15; i++)
-			ballSet.addElement(new Ball(ColorL.RED, new MathVector(), ballWeight));
+			ballSet.addElement(new Ball(BallColor.RED));
 		
 		// adding color balls
-		ballSet.addElement(new Ball(ColorL.GREEN, new MathVector(), ballWeight));
-		ballSet.addElement(new Ball(ColorL.BROWN, new MathVector(), ballWeight));
-		ballSet.addElement(new Ball(ColorL.YELLOW, new MathVector(), ballWeight));
-		ballSet.addElement(new Ball(ColorL.BLUE, new MathVector(), ballWeight));
-		ballSet.addElement(new Ball(ColorL.PINK, new MathVector(), ballWeight));
-		ballSet.addElement(new Ball(ColorL.BLACK, new MathVector(), ballWeight));
+		ballSet.addElement(new Ball(BallColor.GREEN));
+		ballSet.addElement(new Ball(BallColor.BROWN));
+		ballSet.addElement(new Ball(BallColor.YELLOW));
+		ballSet.addElement(new Ball(BallColor.BLUE));
+		ballSet.addElement(new Ball(BallColor.PINK));
+		ballSet.addElement(new Ball(BallColor.BLACK));
+		
+		cue = Cue.getInstance();
 	}
 
 	public Cloth getCloth() {
@@ -47,7 +50,7 @@ public class Table {
 	}
 	
 	public int getBallsRadius() {
-		return (int) getWhiteBall().getRadius();
+		return (int) Ball.getRadius();
 	}
 	
 	public void setMoveState(MoveState newState) {
@@ -56,5 +59,9 @@ public class Table {
 	
 	public MoveState getMoveState() {
 		return stateMove;
+	}
+
+	public Cue getCue() {
+		return cue;
 	}
 }
