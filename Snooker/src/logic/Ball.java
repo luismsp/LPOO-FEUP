@@ -64,9 +64,9 @@ public class Ball {
 	public boolean isMoving() { return !velocity.isNull(); }
 	
 	
-	//
+	// -----
 	// other
-	//
+	// -----
 	
 	public void updateForce(double dt, double frictionMod) {
 		
@@ -92,20 +92,6 @@ public class Ball {
 		x.multiply(dt);
 		position.add(x);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 }

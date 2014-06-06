@@ -9,20 +9,40 @@ public class Game {
 	private Player p2;
 
 	
+	// -----------
+	// constructor
+	// -----------
+	
 	public Game(String player1Name, String player2Name) {
 		this.table = new Table(20, 10, BallColor.BLACK, 20, 2.54, 1.27);;
-		this.p1 = new Player(player1Name);
-		this.p2 = new Player(player2Name);
+		this.setP1(new Player(player1Name));
+		this.setP2(new Player(player2Name));
 	}
 	
-	public Table getTable() {
-		return table;
-	}
-		
-	public Cue getCue() {
-		return table.getCue();
-	}
+	
+	
+	// ---------------
+	// getters / setters
+	// ---------------
+	
+	public Player getP1() { return p1; }
 
+	public void setP1(Player p1) { this.p1 = p1; }
+
+	public Player getP2() { return p2; }
+
+	public void setP2(Player p2) { this.p2 = p2; }
+	
+	public Table getTable() { return table; }
+		
+	public Cue getCue() { return table.getCue(); }
+
+	
+	
+	// -----
+	// other
+	// -----
+	
 	public void cueHit() {
 		double forceMod = getCue().getOffset();
 		V2D forceToApply = V2D.subtract(table.getWhiteBall().getPosition(),getCue().getPosition());
@@ -66,9 +86,6 @@ public class Game {
 			a.updatePosition(dt);
 		}	
 	}
-	
-	
-	
 	
 	
 }

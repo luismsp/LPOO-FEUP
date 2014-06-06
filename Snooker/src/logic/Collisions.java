@@ -122,31 +122,3 @@ public class Collisions {
 //		shape.previous = shape.current
 //		shape.Render( i );*/
 //}
-//
-//public void updatePhysics(float dt) {
-//	
-//	// for every ball
-//	// handleBallCollision(current_ball,next_ball);
-//	
-//	updateForce(dt);
-//	updateVelocity(dt);
-//	updatePosition(dt);
-//}
-//
-//public void updateForce(float dt) {
-//	// TODO F -= Fatrito;	
-//}
-//
-//public void updateVelocity(float dt) {
-//	// v += (1/m * F) * dt;
-//	/*
-//	 * MVector temp = MVector.multiply(inv_mass,force);
-//	 * temp.multiply(dt);
-//	 * velocity.add(temp)
-//	 * 
-//	 */1
-//}
-//
-//public void updatePosition(float dt) {
-//	// x += v * dt;
-//}
