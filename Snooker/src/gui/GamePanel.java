@@ -357,30 +357,30 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 
 		// Drawing Border holes
 		g.setColor(Color.BLACK);
-		g.fillArc((int) game.getTable().getCloth().getCoordHoles().get(0).getX() - 7,
-				(int) game.getTable().getCloth().getCoordHoles().get(0).getY() - 7,
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(0).getX() - 7,
+				(int) game.getTable().getCloth().getHoles().get(0).getY() - 7,
 				2 * 27, 2 * 27, 0, 270);
-		g.fillArc((int) game.getTable().getCloth().getCoordHoles().get(1).getX() - 7,
-				(int) game.getTable().getCloth().getCoordHoles().get(1).getY() - 7,
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(1).getX() - 7,
+				(int) game.getTable().getCloth().getHoles().get(1).getY() - 7,
 				2 * 27, 2 * 27, 90, 270);
-		g.fillArc((int) game.getTable().getCloth().getCoordHoles().get(2).getX() - 7,
-				(int) game.getTable().getCloth().getCoordHoles().get(2).getY() - 10,
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(2).getX() - 7,
+				(int) game.getTable().getCloth().getHoles().get(2).getY() - 10,
 				2 * 27, 2 * 40, 0, 180);
-		g.fillArc((int) game.getTable().getCloth().getCoordHoles().get(3).getX() - 7,
-				(int) game.getTable().getCloth().getCoordHoles().get(3).getY() - 30,
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(3).getX() - 7,
+				(int) game.getTable().getCloth().getHoles().get(3).getY() - 30,
 				2 * 27, 2 * 40, 180, 180);
-		g.fillArc((int) game.getTable().getCloth().getCoordHoles().get(4).getX() - 7,
-				(int) game.getTable().getCloth().getCoordHoles().get(4).getY() - 7,
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(4).getX() - 7,
+				(int) game.getTable().getCloth().getHoles().get(4).getY() - 7,
 				2 * 27, 2 * 27, 270, 270);
-		g.fillArc((int) game.getTable().getCloth().getCoordHoles().get(5).getX() - 7,
-				(int) game.getTable().getCloth().getCoordHoles().get(5).getY() - 7,
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(5).getX() - 7,
+				(int) game.getTable().getCloth().getHoles().get(5).getY() - 7,
 				2 * 27, 2 * 27, 180, 270);
 
 		// Drawing Holes
 		g.setColor(new Color(122, 139, 139));
-		for (int i = 0; i < game.getTable().getCloth().getCoordHoles().size(); i++)
-			g.fillOval((int) game.getTable().getCloth().getCoordHoles().get(i).getX(),
-					(int) game.getTable().getCloth().getCoordHoles().get(i).getY(),
+		for (int i = 0; i < game.getTable().getCloth().getHoles().size(); i++)
+			g.fillOval((int) game.getTable().getCloth().getHoles().get(i).getX(),
+					(int) game.getTable().getCloth().getHoles().get(i).getY(),
 					2 * Cloth.getHoleRadius(), 2 * Cloth.getHoleRadius());
 
 	}

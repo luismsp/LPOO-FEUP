@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.Vector;
+
 public class Game {
 	
 	private Table table;
@@ -27,10 +29,29 @@ public class Game {
 		forceToApply.normalize();
 		forceToApply.multiply(forceMod);
 		
-		// TODO
 		table.getWhiteBall().setForce(forceToApply);
+	}
+	
+	public void updatePhysics(float dt) {
 		
+		Vector<V2D> holes = table.getCloth().getHoles();
+		Vector<Ball> balls = table.getBallSet();
 		
-		
+		for (int i = 0; i < balls.size(); ++i) {
+			
+			Ball a = balls.get(i);
+			
+			Collisions.handleBorderCollision(a);
+			Collisions.handlePotting(a,holes);
+
+			for (int j = 0; j < balls.size(); ++j) {
+				
+				if (i <= j)
+					continue;
+				
+				Ball b = balls.get(j);
+				Collisions.handleBallCollision(a,b);
+			}
+		}
 	}
 }
