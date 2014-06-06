@@ -20,4 +20,15 @@ public class Game {
 	public Cue getCue() {
 		return table.getCue();
 	}
+
+	public void cueHit() {
+		double forceMod = getCue().getOffset();
+		V2D force = V2D.subtract(table.getWhiteBall().getPosition(),getCue().getPosition());
+		force.normalize();
+		force.multiply(forceMod);
+		// TODO
+		
+		
+		
+	}
 }

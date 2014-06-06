@@ -8,11 +8,11 @@ public class Cloth {
 	private BallColor color;
 	private static int width;
 	private static int height;
-	private MVector initialPosition;
-	private MVector finalPosition;
+	private V2D initialPosition;
+	private V2D finalPosition;
 	private static int holeRadius;
 	
-	private Vector<MVector> coordHoles = new Vector<MVector>();
+	private Vector<V2D> coordHoles = new Vector<V2D>();
 	
 	public Cloth(double friction, BallColor color, double width, double height, int holeRadius) {
 		this.friction = friction;
@@ -20,8 +20,8 @@ public class Cloth {
 		Cloth.width = (int) width * 400;
 		Cloth.height = (int) height * 400;
 		Cloth.holeRadius = holeRadius;
-		this.initialPosition = new MVector(92, 92);
-		this.finalPosition = new MVector((width * 400) + initialPosition.getX(), (height * 400) + initialPosition.getY());
+		this.initialPosition = new V2D(92, 92);
+		this.finalPosition = new V2D((width * 400) + initialPosition.getX(), (height * 400) + initialPosition.getY());
 	}
 	
 	public double getFriction() {
@@ -40,15 +40,15 @@ public class Cloth {
 		return height;
 	}
 	
-	public int getHoleRadius() {
+	public static int getHoleRadius() {
 		return holeRadius;
 	}
 	
-	public Vector<MVector> getCoordHoles() {
+	public Vector<V2D> getCoordHoles() {
 		return coordHoles;
 	}
 	
-	public void addHole(MVector coord) {
+	public void addHole(V2D coord) {
 		coordHoles.addElement(coord);
 	}
 	
@@ -60,11 +60,11 @@ public class Cloth {
 		this.color = newColor;
 	}
 	
-	public MVector getInitialPosition() {
+	public V2D getInitialPosition() {
 		return initialPosition;
 	}
 	
-	public MVector getFinalPosition() {
+	public V2D getFinalPosition() {
 		return finalPosition;
 	}
 }

@@ -7,9 +7,9 @@ public class Ball {
 	private static double mass = 0.170;
 	private static double inv_mass = 1/mass;
 	private static double radius = 15;
-	private MVector position = new MVector();
-	private MVector velocity = new MVector();
-	private MVector force = new MVector();
+	private V2D position = new V2D();
+	private V2D velocity = new V2D();
+	private V2D force = new V2D();
 	private boolean potted = false;
 
 
@@ -31,21 +31,21 @@ public class Ball {
 	
 	public int getValue() { return value; }
 
-	public MVector getPosition() { return position; }
+	public V2D getPosition() { return position; }
 
 	public double getX() { return position.getX(); }
 
 	public double getY() { return position.getY(); }
 
-	public void setPosition(MVector position) { this.position = position; }
+	public void setPosition(V2D position) { this.position = position; }
 
-	public MVector getVelocity() { return velocity; }
+	public V2D getVelocity() { return velocity; }
 
-	public void setVelocity(MVector velocity) { this.velocity = velocity; }
+	public void setVelocity(V2D velocity) { this.velocity = velocity; }
 
-	public MVector getForce() { return force; }
+	public V2D getForce() { return force; }
 
-	public void setForce(MVector force) { this.force = force; }
+	public void setForce(V2D force) { this.force = force; }
 
 	public static double getMass() { return mass; }
 

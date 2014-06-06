@@ -5,11 +5,13 @@ public class Cue {
 	
 	private static int DEFAULT_CUE_OFFSET_INC = 4;
 	
-	private static final int size = 10;
-	private static final int strength = 1000;
-	private static int rotation = 0;
+	private final int size = 10;
+	private final int strength = 1000;
+	private int rotation = 0;
 	private static int MAX_CUE_OFFSET = (int) (6 * Ball.getRadius());
-	private static int cueOffset = 0, cueOffsetInc = DEFAULT_CUE_OFFSET_INC;
+	private int cueOffset = 0, cueOffsetInc = DEFAULT_CUE_OFFSET_INC;
+	private V2D position = new V2D();
+	
 
 	//
 
@@ -30,7 +32,7 @@ public class Cue {
 	}
 
 	public void setRotation(int newRotation) {
-		Cue.rotation = newRotation;
+		rotation = newRotation;
 	}
 
 	public void incRotation() {
@@ -42,7 +44,7 @@ public class Cue {
 	}
 
 	public int getRotation() {
-		return Cue.rotation;
+		return rotation;
 	}
 
 	public void updateOffset() {
@@ -52,12 +54,28 @@ public class Cue {
 			cueOffsetInc *= -1;
 	}
 
-	public double getCueOffset() {
+	public double getOffset() {
 		return cueOffset;
+	}
+	
+	public static int getMaxOffset() {
+		return Cue.MAX_CUE_OFFSET;
 	}
 	
 	public void resetOffset() {
 		cueOffset = 0;
 		cueOffsetInc = DEFAULT_CUE_OFFSET_INC;
+	}
+	
+	public void setPosition(V2D position) {
+		this.position = position;
+	}
+	
+	public V2D getPosition() {
+		return position;
+	}
+	
+	public double getCueForce() {
+		return (strength * cueOffset) / (Cue.getMaxOffset());
 	}
 }

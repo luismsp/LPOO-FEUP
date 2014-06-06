@@ -15,7 +15,7 @@ public class InitialWindow extends JFrame {
 	MainMenu mainMenu = new MainMenu();
 	
 	public InitialWindow() {
-
+		
 		setResizable(false);
 		setTitle("Welcome to Snooker!");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,16 +27,16 @@ public class InitialWindow extends JFrame {
 		initialPanel.setSize(getSize());
 		add(initialPanel);
 		
-		//mainMenu.setVisible(true);
+		mainMenu.setVisible(true);
 		
-		Border border = BorderFactory.createTitledBorder("Loading...");
-	    progressBar.setBorder(border);
-	    
-		add(progressBar, BorderLayout.SOUTH);
-
-		progressBar.setValue(0);
-		
-		setVisible(true);
+//		Border border = BorderFactory.createTitledBorder("Loading...");
+//	    progressBar.setBorder(border);
+//	    
+//		add(progressBar, BorderLayout.SOUTH);
+//
+//		progressBar.setValue(0);
+//		
+//		setVisible(true);
 	}
 	
 	public void startWindow() {

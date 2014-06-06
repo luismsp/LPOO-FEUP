@@ -1,6 +1,6 @@
 package logic;
 
-public class MVector {
+public class V2D {
 
 	private double x;
 	private double y;
@@ -11,17 +11,17 @@ public class MVector {
 	// constructors
 	// ------------
 	
-	public MVector() {
+	public V2D() {
 		this.x = 0;
 		this.y = 0;
 	}
 
-	public MVector(double x, double y) {
+	public V2D(double x, double y) {
 		this.x = x;
 		this.y = y; 
 	}
 
-	public MVector(MVector p) {
+	public V2D(V2D p) {
 		this.x = p.getX();
 		this.y = p.getY();
 	}
@@ -46,34 +46,38 @@ public class MVector {
 	// ----------
 	// operations
 	// ----------
-	
+		
 	public double norm() { return Math.sqrt(x*x + y*y); }
 		
 	//public static MathVector add(MathVector v1, MathVector v2) { return new MathVector(v1.x+v2.x,v1.y+v2.y); }
 	
-	public void add(MVector v1) { x += v1.x; y += v1.y; }
+	public void add(V2D v1) { x += v1.x; y += v1.y; }
 	
 	//public static Vector2d add(Vector2d v1, Vector2d v2) { return new Vector2d(v1.x+v2.x,v1.y+v2.y); }
 	
-	public static MVector subtract(MVector v1, MVector v2) { return new MVector(v1.x-v2.x,v1.y-v2.y); }
+	public static V2D subtract(V2D v1, V2D v2) { return new V2D(v1.x-v2.x,v1.y-v2.y); }
 	
 	//public static MathVector multiply(MathVector v1, MathVector v2) { return new MathVector(v1.x*v2.x,v1.y*v2.y); }
 	
-	public static MVector multiply(MVector v1, double n) { return new MVector(v1.x*n,v1.y*n); }
+	public static V2D multiply(V2D v1, double n) { return new V2D(v1.x*n,v1.y*n); }
 	
-	public static MVector invertXY(MVector v1) { return new MVector(-v1.x,-v1.y); }
+	public void normalize() { multiply(1/norm()); }
 	
-	public static MVector invertX(MVector v1) { return new MVector(-v1.x,v1.y); }
+	public static V2D normalize(V2D v1) { return new V2D(V2D.multiply(v1,1/v1.norm())); }
 	
-	public static MVector invertY(MVector v1) { return new MVector(v1.x,-v1.y); }
+	public static V2D invertXY(V2D v1) { return new V2D(-v1.x,-v1.y); }
+	
+	public static V2D invertX(V2D v1) { return new V2D(-v1.x,v1.y); }
+	
+	public static V2D invertY(V2D v1) { return new V2D(v1.x,-v1.y); }
 	
 	public void multiply(double n) { x *= n; y *= n; }
 	
-	public static double dotProduct(MVector v1, MVector v2) { return (v1.x*v2.x + v1.y*v2.y); }
+	public static double dotProduct(V2D v1, V2D v2) { return (v1.x*v2.x + v1.y*v2.y); }
 	
-	public static double cos(MVector v1, MVector v2) { return dotProduct(v1,v2) / (v1.norm()*v2.norm()); }
+	public static double cos(V2D v1, V2D v2) { return dotProduct(v1,v2) / (v1.norm()*v2.norm()); }
 	
-	public static double angle(MVector v1, MVector v2) { return Math.acos(cos(v1,v2)); }
+	public static double angle(V2D v1, V2D v2) { return Math.acos(cos(v1,v2)); }
 	
-	public static double sin(MVector v1, MVector v2) { return Math.sin(angle(v1,v2)); }
+	public static double sin(V2D v1, V2D v2) { return Math.sin(angle(v1,v2)); }
 }
