@@ -23,6 +23,7 @@ public class InitialWindow extends JFrame {
 		setLocation(
 				(Utilities.dimScreen.width - getWidth()) / 2,
 				(Utilities.dimScreen.height - getHeight()) / 2);
+		System.out.println("Width:" + Utilities.dimScreen.getWidth() + " Height: " + Utilities.dimScreen.getHeight());
 		initialPanel.setSize(getSize());
 		add(initialPanel);
 		

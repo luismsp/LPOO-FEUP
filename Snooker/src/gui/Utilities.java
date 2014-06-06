@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 public class Utilities {
+	//ppublic static Dimension dimScreen = Toolkit.getDefaultToolkit().getScreenSize();
 	public static Dimension dimScreen = new Dimension(1200, 800);
 	public static Dimension optionsMenuSize = new Dimension(600, 600);
 	public static Color[] ballsColors = { Color.WHITE, Color.RED.darker(), Color.YELLOW.darker(),
