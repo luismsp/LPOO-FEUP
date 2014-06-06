@@ -12,6 +12,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -28,6 +30,7 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 	private static final long serialVersionUID = 1L;
 
 	private Image cueImage;
+	private List<Image> ballImages = new ArrayList<>();
 	
 	private Timer timer;
 	private static final int DESIRED_FPS = 50;
@@ -53,8 +56,16 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 	private V2D pinkBallPoint;
 
 	
-	public void loadImage() throws IOException {
+	public void loadImages() throws IOException {
 		cueImage = ImageIO.read(this.getClass().getResource("res/cue.png"));
+		ballImages.add(ImageIO.read(this.getClass().getResource("res/whiteBall.png")));
+		ballImages.add(ImageIO.read(this.getClass().getResource("res/redBall.png")));
+		ballImages.add(ImageIO.read(this.getClass().getResource("res/yellowBall.png")));
+		ballImages.add(ImageIO.read(this.getClass().getResource("res/greenBall.png")));
+		ballImages.add(ImageIO.read(this.getClass().getResource("res/brownBall.png")));
+		ballImages.add(ImageIO.read(this.getClass().getResource("res/blueBall.png")));
+		ballImages.add(ImageIO.read(this.getClass().getResource("res/pinkBall.png")));
+		ballImages.add(ImageIO.read(this.getClass().getResource("res/blackBall.png")));
 	}
 	
 	public GamePanel() {
@@ -73,7 +84,7 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 	}
 
 	public void Init() throws IOException {
-		loadImage();
+		loadImages();
 		
 		InitializeDrawingPoints();
 		InitializeBallsPoints();
@@ -416,10 +427,14 @@ public class GamePanel extends JPanel implements ActionListener, Runnable,
 	private void DrawBalls(Graphics g, double radiusBall) {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < game.getTable().getBallSet().size(); i++) {
-			g.setColor(Utilities.ballsColors[game.getTable().getBallSet().get(i).getColor().ordinal()]);
+			int indexColor = game.getTable().getBallSet().get(i).getColor().ordinal();
 			
-			g.fillOval((int) (game.getTable().getBallSet().get(i).getX() - radiusBall), 
-					(int) (game.getTable().getBallSet().get(i).getY() - radiusBall), 2 * (int) radiusBall, 2 * (int) radiusBall);
+			
+			/*g.fillOval((int) (game.getTable().getBallSet().get(i).getX() - radiusBall), 
+					(int) (game.getTable().getBallSet().get(i).getY() - radiusBall), 2 * (int) radiusBall, 2 * (int) radiusBall);*/
+			
+			g.drawImage(ballImages.get(indexColor), (int) (game.getTable().getBallSet().get(i).getX() - radiusBall), 
+					(int) (game.getTable().getBallSet().get(i).getY() - radiusBall), 2 * (int) radiusBall, 2 * (int) radiusBall, null);
 		}
 	}
 
