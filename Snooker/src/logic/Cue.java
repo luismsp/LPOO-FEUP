@@ -6,7 +6,7 @@ public class Cue {
 	private static int DEFAULT_CUE_OFFSET_INC = 4;
 	
 	private final int size = 10;
-	private final int strength = 1000;
+	private final int strength = 300;
 	private int rotation = 0;
 	private static int MAX_CUE_OFFSET = (int) (6 * Ball.getRadius());
 	private int cueOffset = 0, cueOffsetInc = DEFAULT_CUE_OFFSET_INC;

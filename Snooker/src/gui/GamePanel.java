@@ -23,7 +23,7 @@ import javax.swing.Timer;
 import logic.Ball;
 import logic.Cloth;
 import logic.Game;
-import logic.MoveState;
+import logic.GameState;
 import logic.V2D;
 
 public class GamePanel extends JPanel implements ActionListener, Runnable,
@@ -35,12 +35,13 @@ MouseListener, MouseMotionListener, KeyListener {
 
 	private Timer timer;
 	private static final int DESIRED_FPS = 65;
+	private static final double dt = 1.0/DESIRED_FPS;
 
 	boolean showGame = false;
 
 	private Game game;
 
-	private boolean mouseDown = false;
+	//private boolean mouseDown = false;
 
 	private V2D initialWoodPosition;
 	private V2D finalWoodPosition;
@@ -207,54 +208,22 @@ MouseListener, MouseMotionListener, KeyListener {
 
 		// Cloth Holes
 		// Left Up Hole
-		game.getTable().getCloth().addHole(
-				new V2D(initialClothPosition.getX()
-						- Cloth.getHoleRadius(),
-						initialClothPosition.getY()
-						- Cloth.getHoleRadius()));
-		// Left Buttom Hole
-		game.getTable().getCloth().addHole(
-				new V2D(initialClothPosition.getX()
-						- Cloth.getHoleRadius(), finalClothPosition
-						.getY() + Cloth.getHoleRadius() + 20));
+		game.getTable().getCloth().addHole(new V2D(initialClothPosition.getX() - 5,initialClothPosition.getY() - 5));
+		
+		// Left Bottom Hole
+		game.getTable().getCloth().addHole(new V2D(initialClothPosition.getX() - 5, finalClothPosition.getY()+25));
+		
 		// Up Center Hole
-		game.getTable().getCloth().addHole(
-				new V2D(blueBallPoint.getX()
-						- Cloth.getHoleRadius() + 2,
-						initialClothPosition.getY()
-						- Cloth.getHoleRadius() - 10));
+		game.getTable().getCloth().addHole(new V2D(blueBallPoint.getX() + 2, initialClothPosition.getY()-10));
+		
 		// Bottom Center Hole
-		game.getTable().getCloth()
-		.addHole(
-				new V2D(
-						blueBallPoint.getX()
-						- Cloth.getHoleRadius() + 2,
-						finalClothPosition.getY()
-						+ ((finalWoodPosition.getY() - finalClothPosition
-								.getY()) / 2)
-								+ (30 - Cloth.getHoleRadius())));
+		game.getTable().getCloth().addHole(new V2D(blueBallPoint.getX() - 1, finalClothPosition.getY()+((finalWoodPosition.getY()-finalClothPosition.getY())/2)+18));
+		
 		// Right Up Hole
-		game.getTable().getCloth()
-		.addHole(
-				new V2D(
-						finalClothPosition.getX()
-						+ 98
-						- Cloth.getHoleRadius()
-						+ (finalWoodPosition.getX() - finalClothPosition
-								.getX()) / 2,
-								initialClothPosition.getY()
-								- Cloth.getHoleRadius()));
-		// Right Buttom Hole
-		game.getTable().getCloth()
-		.addHole(
-				new V2D(
-						finalClothPosition.getX()
-						+ 98
-						- Cloth.getHoleRadius()
-						+ (finalWoodPosition.getX() - finalClothPosition
-								.getX()) / 2,
-								finalClothPosition.getY()
-								+ Cloth.getHoleRadius() + 20));
+		game.getTable().getCloth().addHole(new V2D(finalClothPosition.getX() + 95 + (finalWoodPosition.getX() - finalClothPosition.getX()) / 2, initialClothPosition.getY() - 5));
+		
+		// Right Bottom Hole
+		game.getTable().getCloth().addHole(new V2D(finalClothPosition.getX() + 95 + (finalWoodPosition.getX()-finalClothPosition.getX())/2, finalClothPosition.getY() + 26));
 
 	}
 
@@ -264,10 +233,22 @@ MouseListener, MouseMotionListener, KeyListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (mouseDown) {
+		GameState gs = game.getGameState();
+		
+		if (gs == GameState.TARGET_SELECTED)
 			game.getCue().updateOffset();
+		
+		else if (gs == GameState.HIT_DONE) {
+			
+			if (game.allStopped()) {
+				game.setGameState(GameState.WAITING_FOR_HIT);
+				//System.out.println("inside if");
+			}
+				
+			else
+				game.updatePhysics(dt,initialClothPosition,finalWoodPosition);
 		}
-
+			
 		repaint();
 	}
 
@@ -369,31 +350,48 @@ MouseListener, MouseMotionListener, KeyListener {
 
 		// Drawing Border holes
 		g.setColor(Color.BLACK);
-		g.fillArc((int) game.getTable().getCloth().getHoles().get(0).getX() - 7,
-				(int) game.getTable().getCloth().getHoles().get(0).getY() - 7,
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(0).getX() - 22,
+				(int) game.getTable().getCloth().getHoles().get(0).getY() - 22,
 				2 * 27, 2 * 27, 0, 270);
-		g.fillArc((int) game.getTable().getCloth().getHoles().get(1).getX() - 7,
-				(int) game.getTable().getCloth().getHoles().get(1).getY() - 7,
+		
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(1).getX() - 22,
+				(int) game.getTable().getCloth().getHoles().get(1).getY() + 8,
 				2 * 27, 2 * 27, 90, 270);
-		g.fillArc((int) game.getTable().getCloth().getHoles().get(2).getX() - 7,
-				(int) game.getTable().getCloth().getHoles().get(2).getY() - 10,
+		
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(2).getX() - 22,
+				(int) game.getTable().getCloth().getHoles().get(2).getY() - 30,
 				2 * 27, 2 * 40, 0, 180);
-		g.fillArc((int) game.getTable().getCloth().getHoles().get(3).getX() - 7,
-				(int) game.getTable().getCloth().getHoles().get(3).getY() - 30,
+		
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(3).getX() - 22,
+				(int) game.getTable().getCloth().getHoles().get(3).getY() - 38,
 				2 * 27, 2 * 40, 180, 180);
-		g.fillArc((int) game.getTable().getCloth().getHoles().get(4).getX() - 7,
-				(int) game.getTable().getCloth().getHoles().get(4).getY() - 7,
+		
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(4).getX() - 22,
+				(int) game.getTable().getCloth().getHoles().get(4).getY() - 22,
 				2 * 27, 2 * 27, 270, 270);
-		g.fillArc((int) game.getTable().getCloth().getHoles().get(5).getX() - 7,
-				(int) game.getTable().getCloth().getHoles().get(5).getY() - 7,
+		
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(5).getX() - 22,
+				(int) game.getTable().getCloth().getHoles().get(5).getY() + 8,
 				2 * 27, 2 * 27, 180, 270);
 
 		// Drawing Holes
 		g.setColor(new Color(122, 139, 139));
-		for (int i = 0; i < game.getTable().getCloth().getHoles().size(); i++)
-			g.fillOval((int) game.getTable().getCloth().getHoles().get(i).getX(),
-					(int) game.getTable().getCloth().getHoles().get(i).getY(),
-					2 * Cloth.getHoleRadius(), 2 * Cloth.getHoleRadius());
+		for (int i = 0; i < game.getTable().getCloth().getHoles().size(); i++) {
+			int x = (int) game.getTable().getCloth().getHoles().get(i).getX();
+			int y = (int) game.getTable().getCloth().getHoles().get(i).getY();
+			
+			if(i == 0 || i == 2 || i == 3 || i == 4) {
+				x -= Ball.getRadius();
+				y -= Ball.getRadius();
+			}
+			
+			if(i == 1 || i == 5) {
+				x -= Ball.getRadius();
+				y += Ball.getRadius();
+			}
+			
+			g.fillOval(x, y, 2 * Cloth.getHoleRadius(), 2 * Cloth.getHoleRadius());
+		}
 
 	}
 
@@ -416,7 +414,12 @@ MouseListener, MouseMotionListener, KeyListener {
 		cx = (int) (wbCoords.getX());
 		cy = (int) (wbCoords.getY() - cueImage.getHeight(null) / 2);
 
-		game.getCue().setPosition(new V2D(cx + xCorrection, cy + yCorrection + cueImage.getWidth(null)/2));
+		game.getCue().setPosition(new V2D((cx + cueImage.getWidth(null)*Math.cos(Math.toRadians(game.getCue().getRotation()))), 
+				(cy + cueImage.getWidth(null) * Math.sin(Math.toRadians(game.getCue().getRotation())))));
+		
+		//System.out.println("Cue X: " + game.getCue().getPosition().getX() + "     Cue Y: " + game.getCue().getPosition().getY() + "\n");
+		//System.out.println("CX: " + cx + "      CY: " + cy + "\n");
+		//System.out.println("XCorrection: " + xCorrection + "      YCorrection: " + yCorrection + "\n");
 
 		g2d.translate(xCorrection, yCorrection);
 		g2d.rotate(rotRad, wbCoords.getX(), wbCoords.getY());
@@ -476,13 +479,12 @@ MouseListener, MouseMotionListener, KeyListener {
 		}
 	}
 
-
 	@Override
 	public void mousePressed(MouseEvent e) {
 		switch (e.getButton()) {
 		case MouseEvent.BUTTON1:
-			mouseDown = true;
-			game.getTable().setMoveState(MoveState.START_HIT);
+			//mouseDown = true;
+			game.setGameState(GameState.TARGET_SELECTED);
 			break;
 			/*
 			 * case MouseEvent.BUTTON3: game.getTable().setMoveState(MoveState.WAITING_HIT);
@@ -495,15 +497,11 @@ MouseListener, MouseMotionListener, KeyListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		// TODO Auto-generated method stub		
+		//mouseDown = false;
 		game.cueHit();
-
-		mouseDown = false;
-		game.getTable().setMoveState(MoveState.WAITING_HIT);
 		game.getCue().resetOffset();
-		
-		//run();
+		game.setGameState(GameState.HIT_DONE);		
 	}
 
 	@Override
@@ -514,7 +512,7 @@ MouseListener, MouseMotionListener, KeyListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		if (game.getTable().getMoveState() == MoveState.WAITING_HIT) {
+		if (game.getGameState() == GameState.WAITING_FOR_HIT) {
 			calculateRotation(e.getX(), e.getY());
 		}
 		repaint();
@@ -539,39 +537,39 @@ MouseListener, MouseMotionListener, KeyListener {
 
 	@Override
 	public void run() {
-		//final float fps = 100;
-		final float dt = 1 / DESIRED_FPS;
-		float accumulator = 0;
-
-
-		// In units seconds
-		float frameStart = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-
-		// main loop
-		while(true) {
-			final float currentTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-
-			// Store the time elapsed since the last frame began
-			accumulator += currentTime - frameStart;
-
-			// Record the starting of this frame
-			frameStart = currentTime;
-
-			// Avoid spiral of death and clamp dt, thus clamping
-			// how many times the UpdatePhysics can be called in
-			// a single game loop.
-			if(accumulator > 0.2f) 
-				accumulator = 0.2f;
-
-			while(accumulator > dt) {
-				game.updatePhysics(dt);
-				accumulator -= dt;
-			}
-			
-			repaint();
-		}
-
-		//final float alpha = accumulator / dt;
+//		//final float fps = 100;
+//		final float dt = 1 / DESIRED_FPS;
+//		float accumulator = 0;
+//
+//
+//		// In units seconds
+//		float frameStart = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+//
+//		// main loop
+//		while(true) {
+//			final float currentTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+//
+//			// Store the time elapsed since the last frame began
+//			accumulator += currentTime - frameStart;
+//
+//			// Record the starting of this frame
+//			frameStart = currentTime;
+//
+//			// Avoid spiral of death and clamp dt, thus clamping
+//			// how many times the UpdatePhysics can be called in
+//			// a single game loop.
+//			if(accumulator > 0.2f) 
+//				accumulator = 0.2f;
+//
+//			while(accumulator > dt) {
+//				game.updatePhysics(dt);
+//				accumulator -= dt;
+//			}
+//			
+//			repaint();
+//		}
+//
+//		//final float alpha = accumulator / dt;
 
 	}
 

@@ -7,7 +7,6 @@ public class Table {
 	private Cloth cloth;
 	private Cue cue;
 	private Vector<Ball> ballSet = new Vector <Ball>();
-	private MoveState stateMove = MoveState.WAITING_HIT;
 
 	//
 
@@ -53,14 +52,6 @@ public class Table {
 		return (int) Ball.getRadius();
 	}
 	
-	public void setMoveState(MoveState newState) {
-		stateMove = newState;
-	}
-	
-	public MoveState getMoveState() {
-		return stateMove;
-	}
-
 	public Cue getCue() {
 		return cue;
 	}

@@ -61,36 +61,41 @@ public class Ball {
 
 	public void setPotted(boolean potted) { this.potted = potted; }
 
-	public boolean isMoving() { return !velocity.isNull(); }
+	public boolean isMoving() { return !force.isNull(); }
 	
 	
 	// -----
 	// other
 	// -----
 	
-	public void updateForce(double dt, double frictionMod) {
+	public void updateForce(double frictionMod) {
 		
-		V2D f = new V2D(force);
-		f.normalize();
-		f.invertXY();
-		f.multiply(frictionMod);
-		f.multiply(dt);
-		force.add(f);		
+		force.multiply(frictionMod);
+		if (force.norm() < 1.5) 
+			force = new V2D();
+
+//		if (value == 0)
+//			System.out.println("FORCE 0 " + force);
 	}
 	
-	public void updateVelocity(double dt) {
+	public void updateVelocity() {
 		
 		V2D v = new V2D(force);
 		v.multiply(inv_mass);
-		v.multiply(dt);
-		velocity.add(v);
+		velocity = v;
+//		if (value == 0)
+//			System.out.println("VELOCITY 0 " + velocity);
 	}
 	
 	public void updatePosition(double dt) {
 		
-		V2D x = new V2D(velocity);
-		x.multiply(dt);
-		position.add(x);
+//		if (value == 0)
+//			System.out.println("before " + position.getX() + "  " + position.getY());
+		V2D pos = new V2D(velocity);
+		pos.multiply(dt);
+		position.add(pos);
+//		if (value == 0)
+//			System.out.println("after " + position.getX() + "  " + position.getY());
 	}
 	
 	
