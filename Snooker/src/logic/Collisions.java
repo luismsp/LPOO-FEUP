@@ -29,10 +29,12 @@ public class Collisions {
 		// formed between the two radii to know the amount of force transmitted
 		V2D radii_vector = new V2D(b.getPosition());
 		radii_vector.subtract(a.getPosition());
+		radii_vector.normalize();
 		
 		//System.out.println("radii vector between "+a.getValue()+" and "+b.getValue()+" : "+radii_vector);
 		
-		V2D fb = new V2D(a.getForce());
+		V2D fb = new V2D(radii_vector);
+		fb.multiply(a.getForce().norm());
 		fb.multiply(V2D.cos(a.getForce(),radii_vector));
 		fb.multiply(RESTITUTION_COEFF);
 		
@@ -54,7 +56,7 @@ public class Collisions {
 		// para definir correctamente os limites
 		double uplimit = initialClothPosition.getY();
 		double leftlimit = initialClothPosition.getX();
-		double rightlimit = finalClothPosition.getX()+55;
+		double rightlimit = finalClothPosition.getX()+65;
 		double downlimit = finalClothPosition.getY()-Ball.getRadius()-5;
 		double r = Ball.getRadius();
 		
@@ -79,7 +81,7 @@ public class Collisions {
 			if (p1+p2 < r) {
 				System.out.println("potted!");
 				a.setPotted(true);
-				a.setVelocity(new V2D());
+				a.setForce(new V2D());
 			}
 		}	
 	}

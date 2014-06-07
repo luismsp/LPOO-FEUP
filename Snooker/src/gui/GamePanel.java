@@ -14,6 +14,7 @@ import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -34,7 +35,7 @@ MouseListener, MouseMotionListener, KeyListener {
 	private List<Image> ballImages = new ArrayList<>();
 
 	private Timer timer;
-	private static final int DESIRED_FPS = 65;
+	private static final int DESIRED_FPS = 200;
 	private static final double dt = 1.0/DESIRED_FPS;
 
 	boolean showGame = false;
@@ -211,7 +212,7 @@ MouseListener, MouseMotionListener, KeyListener {
 		game.getTable().getCloth().addHole(new V2D(initialClothPosition.getX() - 5,initialClothPosition.getY() - 5));
 		
 		// Left Bottom Hole
-		game.getTable().getCloth().addHole(new V2D(initialClothPosition.getX() - 5, finalClothPosition.getY()+25));
+		game.getTable().getCloth().addHole(new V2D(initialClothPosition.getX() - 1, finalClothPosition.getY()+60));
 		
 		// Up Center Hole
 		game.getTable().getCloth().addHole(new V2D(blueBallPoint.getX() + 2, initialClothPosition.getY()-10));
@@ -223,7 +224,7 @@ MouseListener, MouseMotionListener, KeyListener {
 		game.getTable().getCloth().addHole(new V2D(finalClothPosition.getX() + 95 + (finalWoodPosition.getX() - finalClothPosition.getX()) / 2, initialClothPosition.getY() - 5));
 		
 		// Right Bottom Hole
-		game.getTable().getCloth().addHole(new V2D(finalClothPosition.getX() + 95 + (finalWoodPosition.getX()-finalClothPosition.getX())/2, finalClothPosition.getY() + 26));
+		game.getTable().getCloth().addHole(new V2D(finalClothPosition.getX() + 98 + (finalWoodPosition.getX()-finalClothPosition.getX())/2, finalClothPosition.getY() + 61));
 
 	}
 
@@ -260,7 +261,9 @@ MouseListener, MouseMotionListener, KeyListener {
 	private void Draw(Graphics g) {
 		DrawTable(g);
 		DrawBalls(g, Ball.getRadius());
-		DrawStick(g);
+		
+		if (game.getGameState() != GameState.HIT_DONE)
+			DrawStick(g);
 	}
 
 	private void DrawTable(Graphics g) {
@@ -354,8 +357,8 @@ MouseListener, MouseMotionListener, KeyListener {
 				(int) game.getTable().getCloth().getHoles().get(0).getY() - 22,
 				2 * 27, 2 * 27, 0, 270);
 		
-		g.fillArc((int) game.getTable().getCloth().getHoles().get(1).getX() - 22,
-				(int) game.getTable().getCloth().getHoles().get(1).getY() + 8,
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(1).getX() - 26,
+				(int) game.getTable().getCloth().getHoles().get(1).getY() - 26,
 				2 * 27, 2 * 27, 90, 270);
 		
 		g.fillArc((int) game.getTable().getCloth().getHoles().get(2).getX() - 22,
@@ -370,8 +373,8 @@ MouseListener, MouseMotionListener, KeyListener {
 				(int) game.getTable().getCloth().getHoles().get(4).getY() - 22,
 				2 * 27, 2 * 27, 270, 270);
 		
-		g.fillArc((int) game.getTable().getCloth().getHoles().get(5).getX() - 22,
-				(int) game.getTable().getCloth().getHoles().get(5).getY() + 8,
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(5).getX() - 26,
+				(int) game.getTable().getCloth().getHoles().get(5).getY() - 27,
 				2 * 27, 2 * 27, 180, 270);
 
 		// Drawing Holes
@@ -385,14 +388,26 @@ MouseListener, MouseMotionListener, KeyListener {
 				y -= Ball.getRadius();
 			}
 			
-			if(i == 1 || i == 5) {
-				x -= Ball.getRadius();
-				y += Ball.getRadius();
+			if(i == 1) {
+				x -= Ball.getRadius() + 3;
+				y += Ball.getRadius() - 35;
+			}
+			
+			if(i == 5) {
+				x -= Ball.getRadius() + 5;
+				y += Ball.getRadius() - 35;
 			}
 			
 			g.fillOval(x, y, 2 * Cloth.getHoleRadius(), 2 * Cloth.getHoleRadius());
 		}
-
+		
+		
+		Vector<V2D> holes =  game.getTable().getCloth().getHoles();
+		for (int i = 0; i < holes.size(); ++i) {
+			g.setColor(Color.WHITE);
+			g.fillOval((int)holes.get(i).getX(),(int)holes.get(i).getY(),2,2);
+		}
+	
 	}
 
 	private void DrawStick(Graphics g) {
@@ -429,16 +444,13 @@ MouseListener, MouseMotionListener, KeyListener {
 	}
 
 	private void DrawBalls(Graphics g, double radiusBall) {
-		// TODO Auto-generated method stub
 		for (int i = 0; i < game.getTable().getBallSet().size(); i++) {
 			int indexColor = game.getTable().getBallSet().get(i).getColor().ordinal();
 
-
-			/*g.fillOval((int) (game.getTable().getBallSet().get(i).getX() - radiusBall), 
-					(int) (game.getTable().getBallSet().get(i).getY() - radiusBall), 2 * (int) radiusBall, 2 * (int) radiusBall);*/
-
-			g.drawImage(ballImages.get(indexColor), (int) (game.getTable().getBallSet().get(i).getX() - radiusBall), 
-					(int) (game.getTable().getBallSet().get(i).getY() - radiusBall), 2 * (int) radiusBall, 2 * (int) radiusBall, null);
+			if (!game.getTable().getBallSet().get(i).isPotted()) {
+				g.drawImage(ballImages.get(indexColor), (int) (game.getTable().getBallSet().get(i).getX() - radiusBall), 
+						(int) (game.getTable().getBallSet().get(i).getY() - radiusBall), 2 * (int) radiusBall, 2 * (int) radiusBall, null);
+			}
 		}
 	}
 
@@ -481,33 +493,33 @@ MouseListener, MouseMotionListener, KeyListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		switch (e.getButton()) {
-		case MouseEvent.BUTTON1:
-			//mouseDown = true;
-			game.setGameState(GameState.TARGET_SELECTED);
-			break;
-			/*
-			 * case MouseEvent.BUTTON3: game.getTable().setMoveState(MoveState.WAITING_HIT);
-			 * break;
-			 */
-		default:
-			break;
+		if (game.getGameState() == GameState.WAITING_FOR_HIT) {
+			
+			switch (e.getButton()) {
+			case MouseEvent.BUTTON1:
+				//mouseDown = true;
+				game.setGameState(GameState.TARGET_SELECTED);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub		
-		//mouseDown = false;
-		game.cueHit();
-		game.getCue().resetOffset();
-		game.setGameState(GameState.HIT_DONE);		
+		
+		if (game.getGameState() == GameState.TARGET_SELECTED) {
+			game.cueHit();
+			game.getCue().resetOffset();
+			game.setGameState(GameState.HIT_DONE);		
+		}
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
-		repaint();
 	}
 
 	@Override

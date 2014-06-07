@@ -71,7 +71,7 @@ public class Ball {
 	public void updateForce(double frictionMod) {
 		
 		force.multiply(frictionMod);
-		if (force.norm() < 1.5) 
+		if (force.norm() < 3) 
 			force = new V2D();
 
 //		if (value == 0)

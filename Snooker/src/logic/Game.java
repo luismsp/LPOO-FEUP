@@ -80,16 +80,6 @@ public class Game {
 
 		if (!allStopped()) {
 
-			// updating force, velocity and position
-			for (Ball a : balls) {
-				if (a.isPotted())
-					continue;
-
-				a.updateForce(frictionMod);
-				a.updateVelocity();
-				a.updatePosition(dt);
-			}	
-
 			// handling collisions
 			for (int i = 0; i < balls.size(); ++i) {
 
@@ -102,9 +92,8 @@ public class Game {
 
 
 				for (int j = 0; j < balls.size(); ++j) {
-					System.out.println("inside if");
-					//if (i <= j)
-					//continue;
+					if (i >= j)
+						continue;
 
 					Ball b = balls.get(j);
 					if (b.isPotted())
@@ -113,8 +102,21 @@ public class Game {
 					Collisions.handleBallCollision(a,b);
 				}
 			}
-		}
+			
+			// updating force, velocity and position
+			for (Ball a : balls) {
+				if (a.isPotted())
+					continue;
 
+				a.updateForce(frictionMod);
+				a.updateVelocity();
+				a.updatePosition(dt);
+			}	
+		}
+		else 
+			gameState = GameState.WAITING_FOR_HIT;
+		
+		System.out.println("fim updatephysics");
 	}
 
 	public boolean allStopped() {
@@ -126,10 +128,6 @@ public class Game {
 				return false;
 
 		return true;
-
-		//return (!table.getWhiteBall().isMoving());
-
 	}
-
 
 }

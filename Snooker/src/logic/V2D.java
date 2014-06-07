@@ -4,7 +4,7 @@ public class V2D {
 
 	private double x;
 	private double y;
-	
+	private double norm;
 	
 	
 	// ------------
@@ -63,7 +63,7 @@ public class V2D {
 	
 	public static V2D multiply(V2D v1, double n) { return new V2D(v1.x*n,v1.y*n); }
 	
-	public void normalize() { multiply(1.0/norm()); }
+	public void normalize() { multiply(1/norm()); }
 	
 	public static V2D normalize(V2D v1) { return new V2D(V2D.multiply(v1,1/v1.norm())); }
 	
@@ -79,13 +79,7 @@ public class V2D {
 	
 	public static double dotProduct(V2D v1, V2D v2) { return (v1.x*v2.x + v1.y*v2.y); }
 	
-	public static double cos(V2D v1, V2D v2) { 
-	
-		double denom = (v1.norm()*v2.norm());
-		if (denom == 0.0)
-			return 0;
-		return dotProduct(v1,v2) / denom;
-	}
+	public static double cos(V2D v1, V2D v2) { return dotProduct(v1,v2) / (v1.norm()*v2.norm()); }
 	
 	public static double angle(V2D v1, V2D v2) { return Math.acos(cos(v1,v2)); }
 	
@@ -93,5 +87,13 @@ public class V2D {
 
 	public String toString() {
 		return "("+x+","+y+")";
+	}
+
+	public double getNorm() {
+		return norm;
+	}
+
+	public void setNorm(double norm) {
+		this.norm = norm;
 	}
 }
