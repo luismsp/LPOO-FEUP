@@ -72,6 +72,8 @@ public class Game {
 		this.ballPositions = ballPositions;
 	}
 
+	public Player getActivePlayer() { return activePlayer; }
+	
 	public void changeActivePlayer() {
 		if (activePlayer == p1)
 			activePlayer = p2;
