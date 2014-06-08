@@ -42,13 +42,11 @@ MouseListener, MouseMotionListener, KeyListener {
 
 	private Game game;
 
-	//private boolean mouseDown = false;
-
 	private V2D initialWoodPosition;
 	private V2D finalWoodPosition;
 	private V2D initialClothPosition;
 	private V2D finalClothPosition;
-	private V2D buttomVertexTriangle;
+	private V2D bottomVertexTriangle;
 	private V2D upVertexTriangle;
 	private V2D mediumVertexTriangle;
 	private V2D blueBallPoint;
@@ -180,7 +178,7 @@ MouseListener, MouseMotionListener, KeyListener {
 				- game.getTable().getCloth().getInitialPosition().getY() - 25);
 
 		// Triangle Vertexs
-		buttomVertexTriangle = new V2D(game.getTable().getCloth()
+		bottomVertexTriangle = new V2D(game.getTable().getCloth()
 				.getFinalPosition().getX() - 100, game.getTable().getCloth().getHeight());
 		upVertexTriangle = new V2D(game.getTable().getCloth().getFinalPosition()
 				.getX() - 100, game.getTable().getCloth().getHeight() / 3 + 80);
@@ -265,10 +263,18 @@ MouseListener, MouseMotionListener, KeyListener {
 
 	private void Draw(Graphics g) {
 		DrawTable(g);
+		DrawBoardScore(g);
 		DrawBalls(g, Ball.getRadius());
 		
 		if (game.getGameState() != GameState.HIT_DONE)
 			DrawStick(g);
+	}
+
+	private void DrawBoardScore(Graphics g) {
+		g.setColor(Color.BLUE);
+		
+		g.fillOval((int) initialWoodPosition.getX() + 300, (int) finalWoodPosition.getY() + 30, 180, 70);
+		g.fillOval((int) initialWoodPosition.getX() + 580, (int) finalWoodPosition.getY() + 30, 180, 70);
 	}
 
 	private void DrawTable(Graphics g) {
@@ -297,12 +303,12 @@ MouseListener, MouseMotionListener, KeyListener {
 		// Lateral line to triangle
 		g.drawLine((int) upVertexTriangle.getX(),
 				(int) upVertexTriangle.getY(),
-				(int) buttomVertexTriangle.getX(),
-				(int) buttomVertexTriangle.getY());
+				(int) bottomVertexTriangle.getX(),
+				(int) bottomVertexTriangle.getY());
 
 		// Buttom line to triangle
-		g.drawLine((int) buttomVertexTriangle.getX(),
-				(int) buttomVertexTriangle.getY(),
+		g.drawLine((int) bottomVertexTriangle.getX(),
+				(int) bottomVertexTriangle.getY(),
 				(int) mediumVertexTriangle.getX(),
 				(int) mediumVertexTriangle.getY());
 
