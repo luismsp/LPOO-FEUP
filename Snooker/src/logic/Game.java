@@ -10,7 +10,7 @@ public class Game {
 	private Player activePlayer;
 	private GameState gameState = GameState.WAITING_FOR_HIT;
 	private V2D whiteBallInitalPos;
-
+	private boolean areRedsOnTable = true;
 
 	// -----------
 	// constructor
@@ -49,6 +49,17 @@ public class Game {
 
 	public void setWhiteBallInitalPos(V2D whiteBallInitalPos) { this.whiteBallInitalPos = whiteBallInitalPos; }
 
+	public boolean getAreRedsOnTable() { return areRedsOnTable; }
+	
+	public void setAreRedsOnTable() {
+
+		for (int i = 1; i < 16; ++i) 
+			if (!table.getBallSet().get(i).isPotted()) 
+				return;
+		
+		areRedsOnTable = false;
+	}
+	
 	public void changeActivePlayer() {
 		if (activePlayer == p1)
 			activePlayer = p2;
@@ -142,22 +153,29 @@ public class Game {
 		if (invalidBall())
 			foul = true;
 
-
 		if(foul) {
 			changeTurn();
 			activePlayer.updateScore(4);
+		}
+		else {
+			nextMove();
 		}
 		
 		System.out.println(activePlayer.getScore());
 	}
 
 
-	private boolean invalidBall() {
-		return false;
+	private void nextMove() {
+		activePlayer.getNextBall(areRedsOnTable, table.getBallSet());
 	}
 
 
-
+	private boolean invalidBall() {
+		// TODO
+		
+		return false;
+	}
+	
 	private boolean repositionWhiteBall() {
 		Ball white = getTable().getWhiteBall();
 		double r = Ball.getRadius();
@@ -179,8 +197,6 @@ public class Game {
 			return false;
 	}
 
-
-
 	private boolean validSpot(V2D pos) {
 
 		final Vector<Ball> balls = getTable().getBallSet();
@@ -194,13 +210,11 @@ public class Game {
 		return true;
 	}
 
-
-
 	private void changeTurn() {
-		// TODO mudancça dde jogador activo
-		
+		changeActivePlayer();
+		activePlayer.setLastBallWasRed(false);
+		activePlayer.getNextBall(areRedsOnTable, table.getBallSet());
 	}
-
 
 
 	public boolean allStopped() {
