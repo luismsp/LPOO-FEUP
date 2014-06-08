@@ -12,14 +12,14 @@ public class Game {
 	private Player activePlayer;
 	private GameState gameState = GameState.WAITING_FOR_HIT;
 	private List<V2D> ballPositions = new ArrayList<>();
-	
+
 	private boolean areRedsOnTable = true;
 	private int firstBallHit;
 	private boolean newMove = true;
 	private boolean potted = false;
 
-	
-	
+
+
 	// -----------
 	// constructor
 	// -----------
@@ -52,18 +52,18 @@ public class Game {
 	public GameState getGameState() { return gameState; }
 
 	public void setGameState(GameState gameState) { this.gameState = gameState; }
-	
+
 	public boolean getAreRedsOnTable() { return areRedsOnTable; }
-	
+
 	public void setAreRedsOnTable() {
 
 		for (int i = 1; i < 16; ++i) 
 			if (!table.getBallSet().get(i).isPotted()) 
 				return;
-		
+
 		areRedsOnTable = false;
 	}
-	
+
 	public List<V2D> getBallPositions() {
 		return ballPositions;
 	}
@@ -73,7 +73,7 @@ public class Game {
 	}
 
 	public Player getActivePlayer() { return activePlayer; }
-	
+
 	public void changeActivePlayer() {
 		if (activePlayer == p1)
 			activePlayer = p2;
@@ -82,11 +82,11 @@ public class Game {
 	}
 
 
-	
+
 	// -------
 	// physics
 	// -------
-	
+
 	public void cueHit() {
 
 		Cue cue = getCue();
@@ -127,16 +127,15 @@ public class Game {
 					continue;
 
 				//Collisions.handleBallCollision(a,balls);
-				
+
 				Collisions.handleBorderCollision(a,initialClothPosition,finalClothPosition);
 				Ball ball = Collisions.handlePotting(a,holes,potted);
 				if (ball != null) {
 					activePlayer.setBallPotted(ball);
+					setAreRedsOnTable();
 					potted = true;
-				}
-				
-				
-				
+				}				
+
 				for (int j = 0; j < balls.size(); ++j) {
 					if (i >= j)
 						continue;
@@ -147,7 +146,7 @@ public class Game {
 
 					int temp = Collisions.handleBallCollision(a,b);
 					//System.out.println(temp);
-					
+
 					if (temp != -1) {
 						if (newMove) {
 							firstBallHit = temp;
@@ -157,10 +156,9 @@ public class Game {
 					}
 				}
 			}
-			
+
 			//System.out.println(ballPositions.get(0));
-			checkGameFaults();
-			
+
 			// updating force, velocity and position
 			for (Ball a : balls) {
 				if (a.isPotted())
@@ -169,21 +167,27 @@ public class Game {
 				a.updateForce(frictionMod);
 				a.updateVelocity();
 				a.updatePosition(dt);
-			}	
+			}
+
+			if (allStopped())
+				checkGameFaults();
 		}
-		else 
-			gameState = GameState.WAITING_FOR_HIT;
-		
+		else			{
+
+			gameState = GameState.WAITING_FOR_HIT;	
+
+		}
+
 	}
-	
+
 	public boolean allStopped() {
-	
+
 		Vector<Ball> balls = table.getBallSet();
-	
+
 		for (Ball a : balls)
 			if (a.isMoving())
 				return false;
-	
+
 		return true;
 	}
 
@@ -192,17 +196,18 @@ public class Game {
 	// --------------
 	// rules / faults
 	// --------------
-	
+
 	private void checkGameFaults() {
 		boolean fault = false;
-		
+
 		if (whiteBallReposition())
 			fault = true;
-		
+
 		if (invalidBallHit())
 			fault = true;
-		
+
 		colorBallReposition();
+
 
 		if(fault) {
 			changeTurn();
@@ -210,31 +215,35 @@ public class Game {
 		}
 		else {
 			Ball ball = activePlayer.getBallPotted();
-			if (ball == null)
-				return;
 			
-			activePlayer.updateScore(ball.getValue());
-			nextMove();
-		}
-		
+			if (ball == null) {
+				changeTurn();
+			}
+			else {
+				activePlayer.updateScore(ball.getValue());
+				nextMove();
+			}
+		}	
+
+
 		//System.out.println(activePlayer.getScore());
 	}
 
 	private boolean invalidBallHit() {
 		if (!activePlayer.getValidBalls().contains(firstBallHit))
 			return true;
-	
+
 		return false;
 	}
 
 	private boolean whiteBallReposition() {
 		Ball white = getTable().getWhiteBall();
-		
+
 		if (white.isPotted()) {
-			
+
 			V2D pos = new V2D(ballPositions.get(0));
 			System.out.println(pos);
-			
+
 			while (!validSpot(pos))
 				findNewSpot(pos);
 
@@ -249,29 +258,29 @@ public class Game {
 	private void colorBallReposition() {
 		Ball pottedBall = activePlayer.getBallPotted();
 		int pottedValue;
-		
+
 		if (pottedBall == null)
 			return;
-		
+
 		else {
 			pottedValue = pottedBall.getValue();
 			if (pottedValue < 2) 
 				return;
-			
+
 			V2D pos = new V2D(ballPositions.get(pottedValue));
 			System.out.println(pos);
-			
+
 			while (!validSpot(pos))
 				findNewSpot(pos);
-			
+
 			pottedBall.setPosition(pos);
 			pottedBall.setPotted(false);
 		}
-		
+
 	}
 
 	private boolean validSpot(V2D pos) {
-	
+
 		final Vector<Ball> balls = getTable().getBallSet();
 		for (Ball a : balls) {
 			Ball temp = new Ball(BallColor.WHITE);
@@ -279,7 +288,7 @@ public class Game {
 			if (Collisions.ballsColliding(a,temp))
 				return false;
 		}
-		
+
 		return true;
 	}
 
@@ -287,19 +296,19 @@ public class Game {
 		double r = Ball.getRadius();
 		pos.add(new V2D(r,0));	
 	}
-	
-	
-	
+
+
+
 	// ------------
 	// player turns
 	// ------------
 
 	private void nextMove() {
 		activePlayer.getNextBall(areRedsOnTable, table.getBallSet());
-		
+
 		newMove = true;
 		firstBallHit = -1;
-		
+
 		potted = false;
 		activePlayer.setBallPotted(null);
 	}
@@ -308,10 +317,10 @@ public class Game {
 		changeActivePlayer();
 		activePlayer.setLastBallWasRed(false);
 		activePlayer.getNextBall(areRedsOnTable, table.getBallSet());
-		
+
 		newMove = true;
 		firstBallHit = -1;
-		
+
 		potted = false;
 		activePlayer.setBallPotted(null);
 	}

@@ -57,10 +57,7 @@ public class Player {
 	
 
 	public void updateScore(int score) {
-		if (this.score - score < 0)
-			score = 0;
-		else
-			this.score += score;
+		this.score += score;
 	}
 		
 	public void getNextBall(boolean areRedsOnTable, Vector<Ball> balls) {
