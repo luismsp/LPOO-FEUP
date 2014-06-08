@@ -156,6 +156,8 @@ MouseListener, MouseMotionListener, KeyListener {
 		.setPosition(
 				(new V2D(blackBallPoint.getX(),
 						blackBallPoint.getY())));
+		
+		game.setWhiteBallInitalPos(new V2D(game.getTable().getWhiteBall().getPosition()));
 	}
 
 	public void InitializeDrawingPoints() {
@@ -518,71 +520,11 @@ MouseListener, MouseMotionListener, KeyListener {
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public void mouseMoved(MouseEvent e) {
 		if (game.getGameState() == GameState.WAITING_FOR_HIT) {
 			calculateRotation(e.getX(), e.getY());
 		}
 		repaint();
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void run() {
-//		//final float fps = 100;
-//		final float dt = 1 / DESIRED_FPS;
-//		float accumulator = 0;
-//
-//
-//		// In units seconds
-//		float frameStart = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-//
-//		// main loop
-//		while(true) {
-//			final float currentTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-//
-//			// Store the time elapsed since the last frame began
-//			accumulator += currentTime - frameStart;
-//
-//			// Record the starting of this frame
-//			frameStart = currentTime;
-//
-//			// Avoid spiral of death and clamp dt, thus clamping
-//			// how many times the UpdatePhysics can be called in
-//			// a single game loop.
-//			if(accumulator > 0.2f) 
-//				accumulator = 0.2f;
-//
-//			while(accumulator > dt) {
-//				game.updatePhysics(dt);
-//				accumulator -= dt;
-//			}
-//			
-//			repaint();
-//		}
-//
-//		//final float alpha = accumulator / dt;
-
 	}
 
 	@Override
@@ -598,23 +540,52 @@ MouseListener, MouseMotionListener, KeyListener {
 			if (game.getCue().getRotation() < 0)
 				game.getCue().setRotation(360);
 			break;
-			/*
-			 * case KeyEvent.VK_S: game.getTable().getWhiteBall().setPosition(newPosition);
-			 */}
+			}
 		repaint();
-		System.out.println("Cue alpha: " + game.getCue().getRotation());
+		//System.out.println("Cue alpha: " + game.getCue().getRotation());
+	}
+	
+	//
+	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {
+	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
+	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

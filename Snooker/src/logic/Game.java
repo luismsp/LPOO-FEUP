@@ -7,7 +7,9 @@ public class Game {
 	private Table table;
 	private Player p1;
 	private Player p2;
+	private Player activePlayer;
 	private GameState gameState = GameState.WAITING_FOR_HIT;
+	private V2D whiteBallInitalPos;
 
 
 	// -----------
@@ -18,6 +20,7 @@ public class Game {
 		this.table = new Table(20, 0.99, BallColor.BLACK, 20, 2.54, 1.27);;
 		this.setP1(new Player(player1Name));
 		this.setP2(new Player(player2Name));
+		this.activePlayer = p1;
 	}
 
 
@@ -41,7 +44,17 @@ public class Game {
 	public GameState getGameState() { return gameState; }
 
 	public void setGameState(GameState gameState) { this.gameState = gameState; }
+	
+	public V2D getWhiteBallInitalPos() { return whiteBallInitalPos; }
 
+	public void setWhiteBallInitalPos(V2D whiteBallInitalPos) { this.whiteBallInitalPos = whiteBallInitalPos; }
+
+	public void changeActivePlayer() {
+		if (activePlayer == p1)
+			activePlayer = p2;
+		else
+			activePlayer = p1;
+	}
 
 
 	// -----
@@ -90,7 +103,6 @@ public class Game {
 				Collisions.handleBorderCollision(a,initialClothPosition,finalClothPosition);
 				Collisions.handlePotting(a,holes);
 
-
 				for (int j = 0; j < balls.size(); ++j) {
 					if (i >= j)
 						continue;
@@ -102,6 +114,9 @@ public class Game {
 					Collisions.handleBallCollision(a,b);
 				}
 			}
+			
+			System.out.println(whiteBallInitalPos);
+			checkGameFaults();
 			
 			// updating force, velocity and position
 			for (Ball a : balls) {
@@ -116,8 +131,77 @@ public class Game {
 		else 
 			gameState = GameState.WAITING_FOR_HIT;
 		
-		System.out.println("fim updatephysics");
 	}
+
+	private void checkGameFaults() {
+		boolean foul = false;
+		
+		if (repositionWhiteBall())
+			foul = true;
+		
+		if (invalidBall())
+			foul = true;
+
+
+		if(foul) {
+			changeTurn();
+			activePlayer.updateScore(4);
+		}
+		
+		System.out.println(activePlayer.getScore());
+	}
+
+
+	private boolean invalidBall() {
+		return false;
+	}
+
+
+
+	private boolean repositionWhiteBall() {
+		Ball white = getTable().getWhiteBall();
+		double r = Ball.getRadius();
+		
+		if (white.isPotted()) {
+			
+			V2D pos = new V2D(whiteBallInitalPos);
+			System.out.println(pos);
+			
+			while (!validSpot(pos)) {
+				pos.add(new V2D(r,0));
+			}
+			
+			white.setPosition(pos);
+			white.setPotted(false);
+			return true;
+		}
+		else
+			return false;
+	}
+
+
+
+	private boolean validSpot(V2D pos) {
+
+		final Vector<Ball> balls = getTable().getBallSet();
+		for (Ball a : balls) {
+			Ball temp = new Ball(BallColor.WHITE);
+			temp.setPosition(pos);
+			if (Collisions.ballsColliding(a,temp))
+				return false;
+		}
+		
+		return true;
+	}
+
+
+
+	private void changeTurn() {
+		// TODO mudancça dde jogador activo
+		
+	}
+
+
 
 	public boolean allStopped() {
 

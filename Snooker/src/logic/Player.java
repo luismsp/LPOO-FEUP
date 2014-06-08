@@ -20,4 +20,11 @@ public class Player {
 	public String getName() {
 		return name;
 	}
+
+	public void updateScore(int score) {
+		if (this.score - score < 0)
+			score = 0;
+		else
+			this.score += score;
+	}
 }
