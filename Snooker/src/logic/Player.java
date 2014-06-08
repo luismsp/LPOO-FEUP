@@ -10,7 +10,7 @@ public class Player {
 	private int score;
 	private List<Integer> validBalls = new ArrayList<Integer>();
 	private boolean lastBallWasRed = false;
-	
+	private Ball ballPotted = null;
 	
 	
 	// -----------
@@ -45,12 +45,17 @@ public class Player {
 
 	public void setLastBallWasRed(boolean lastBallWasRed) { this.lastBallWasRed = lastBallWasRed; }
 	
+	public Ball getBallPotted() { return ballPotted; }
+
+	public void setBallPotted(Ball ballPotted) { this.ballPotted = ballPotted; }
+	
 	
 	
 	// -----
 	// other
 	// -----
 	
+
 	public void updateScore(int score) {
 		if (this.score - score < 0)
 			score = 0;
@@ -84,11 +89,5 @@ public class Player {
 			}
 		}
 	}
-
-	
-	
-	
-	
-	
 	
 }

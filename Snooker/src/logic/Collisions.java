@@ -69,7 +69,9 @@ public class Collisions {
 	
 	}
 	
-	public static void handlePotting(Ball a, Vector<V2D> holes) /* "collision with holes" */ {		
+	public static Ball handlePotting(Ball a, Vector<V2D> holes, boolean alreadyPotted) /* "collision with holes" */ {		
+		
+		Ball potted = null;
 		
 		double r = Ball.getRadius()+Cloth.getHoleRadius()-5;
 		r *= r;
@@ -80,11 +82,22 @@ public class Collisions {
 			double p2 = a.getY() - v.getY(); p2 *= p2;
 
 			if (p1+p2 < r) {
-				System.out.println("potted!");
-				a.setPotted(true);
-				a.setForce(new V2D());
+				
+				if (alreadyPotted)
+					a.getForce().invertXY();
+				
+				else {
+					a.setPotted(true);
+					a.setForce(new V2D());
+					potted = a;
+					//System.out.println("potted!");
+				}
+				
+				return potted;				
 			}
-		}	
+		}
+		
+		return potted;
 	}
 	
 }

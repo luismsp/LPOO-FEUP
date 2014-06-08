@@ -16,6 +16,7 @@ public class Game {
 	private boolean areRedsOnTable = true;
 	private int firstBallHit;
 	private boolean newMove = true;
+	private boolean potted = false;
 
 	
 	
@@ -124,7 +125,11 @@ public class Game {
 					continue;
 
 				Collisions.handleBorderCollision(a,initialClothPosition,finalClothPosition);
-				Collisions.handlePotting(a,holes);
+				Ball ball = Collisions.handlePotting(a,holes,potted);
+				if (ball != null) {
+					activePlayer.setBallPotted(ball);
+					potted = true;
+				}
 
 				for (int j = 0; j < balls.size(); ++j) {
 					if (i >= j)
@@ -208,17 +213,15 @@ public class Game {
 
 	private boolean whiteBallReposition() {
 		Ball white = getTable().getWhiteBall();
-		double r = Ball.getRadius();
 		
 		if (white.isPotted()) {
 			
 			V2D pos = new V2D(ballPositions.get(0));
 			System.out.println(pos);
 			
-			while (!validSpot(pos)) {
-				pos.add(new V2D(r,0));
-			}
-			
+			while (!validSpot(pos))
+				findNewSpot(pos);
+
 			white.setPosition(pos);
 			white.setPotted(false);
 			return true;
@@ -228,10 +231,29 @@ public class Game {
 	}
 
 	private void colorBallReposition() {
-		// TODO Auto-generated method stub
+		Ball pottedBall = activePlayer.getBallPotted();
+		int pottedValue;
+		
+		if (pottedBall == null)
+			return;
+		
+		else {
+			pottedValue = pottedBall.getValue();
+			if (pottedValue < 2) 
+				return;
+			
+			V2D pos = new V2D(ballPositions.get(pottedValue));
+			System.out.println(pos);
+			
+			while (!validSpot(pos))
+				findNewSpot(pos);
+			
+			pottedBall.setPosition(pos);
+			pottedBall.setPotted(false);
+		}
 		
 	}
-	
+
 	private boolean validSpot(V2D pos) {
 	
 		final Vector<Ball> balls = getTable().getBallSet();
@@ -245,6 +267,11 @@ public class Game {
 		return true;
 	}
 
+	private void findNewSpot(V2D pos) {
+		double r = Ball.getRadius();
+		pos.add(new V2D(r,0));	
+	}
+	
 	
 	
 	// ------------
@@ -253,16 +280,24 @@ public class Game {
 
 	private void nextMove() {
 		activePlayer.getNextBall(areRedsOnTable, table.getBallSet());
+		
 		newMove = true;
 		firstBallHit = -1;
+		
+		potted = false;
+		activePlayer.setBallPotted(null);
 	}
 
 	private void changeTurn() {
 		changeActivePlayer();
 		activePlayer.setLastBallWasRed(false);
 		activePlayer.getNextBall(areRedsOnTable, table.getBallSet());
+		
 		newMove = true;
 		firstBallHit = -1;
+		
+		potted = false;
+		activePlayer.setBallPotted(null);
 	}
 
 }
