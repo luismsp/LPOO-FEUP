@@ -14,7 +14,6 @@ import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -225,19 +224,19 @@ MouseListener, MouseMotionListener, KeyListener {
 
 		// Cloth Holes
 		// Left Up Hole
-		game.getTable().getCloth().addHole(new V2D(initialClothPosition.getX() - 5,initialClothPosition.getY() - 5));
+		game.getTable().getCloth().addHole(new V2D(initialClothPosition.getX(), initialClothPosition.getY()));
 		
 		// Left Bottom Hole
 		game.getTable().getCloth().addHole(new V2D(initialClothPosition.getX() - 1, finalClothPosition.getY()+60));
 		
 		// Up Center Hole
-		game.getTable().getCloth().addHole(new V2D(blueBallPoint.getX() + 2, initialClothPosition.getY()-10));
+		game.getTable().getCloth().addHole(new V2D(blueBallPoint.getX(), initialClothPosition.getY()-6));
 		
 		// Bottom Center Hole
-		game.getTable().getCloth().addHole(new V2D(blueBallPoint.getX() - 1, finalClothPosition.getY()+((finalWoodPosition.getY()-finalClothPosition.getY())/2)+18));
+		game.getTable().getCloth().addHole(new V2D(blueBallPoint.getX() + 3, finalClothPosition.getY()+((finalWoodPosition.getY()-finalClothPosition.getY())/2) + 26));
 		
 		// Right Up Hole
-		game.getTable().getCloth().addHole(new V2D(finalClothPosition.getX() + 95 + (finalWoodPosition.getX() - finalClothPosition.getX()) / 2, initialClothPosition.getY() - 5));
+		game.getTable().getCloth().addHole(new V2D(finalClothPosition.getX() + 98 + (finalWoodPosition.getX() - finalClothPosition.getX()) / 2, initialClothPosition.getY()));
 		
 		// Right Bottom Hole
 		game.getTable().getCloth().addHole(new V2D(finalClothPosition.getX() + 98 + (finalWoodPosition.getX()-finalClothPosition.getX())/2, finalClothPosition.getY() + 61));
@@ -396,8 +395,8 @@ MouseListener, MouseMotionListener, KeyListener {
 
 		// Drawing Border holes
 		g.setColor(Color.BLACK);
-		g.fillArc((int) game.getTable().getCloth().getHoles().get(0).getX() - 22,
-				(int) game.getTable().getCloth().getHoles().get(0).getY() - 22,
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(0).getX() - 27,
+				(int) game.getTable().getCloth().getHoles().get(0).getY() - 27,
 				2 * 27, 2 * 27, 0, 270);
 		
 		g.fillArc((int) game.getTable().getCloth().getHoles().get(1).getX() - 26,
@@ -405,15 +404,15 @@ MouseListener, MouseMotionListener, KeyListener {
 				2 * 27, 2 * 27, 90, 270);
 		
 		g.fillArc((int) game.getTable().getCloth().getHoles().get(2).getX() - 22,
-				(int) game.getTable().getCloth().getHoles().get(2).getY() - 30,
+				(int) game.getTable().getCloth().getHoles().get(2).getY() - 34,
 				2 * 27, 2 * 40, 0, 180);
 		
-		g.fillArc((int) game.getTable().getCloth().getHoles().get(3).getX() - 22,
-				(int) game.getTable().getCloth().getHoles().get(3).getY() - 38,
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(3).getX() - 25,
+				(int) game.getTable().getCloth().getHoles().get(3).getY() - 46,
 				2 * 27, 2 * 40, 180, 180);
 		
-		g.fillArc((int) game.getTable().getCloth().getHoles().get(4).getX() - 22,
-				(int) game.getTable().getCloth().getHoles().get(4).getY() - 22,
+		g.fillArc((int) game.getTable().getCloth().getHoles().get(4).getX() - 25,
+				(int) game.getTable().getCloth().getHoles().get(4).getY() - 27,
 				2 * 27, 2 * 27, 270, 270);
 		
 		g.fillArc((int) game.getTable().getCloth().getHoles().get(5).getX() - 26,
@@ -422,13 +421,14 @@ MouseListener, MouseMotionListener, KeyListener {
 
 		// Drawing Holes
 		g.setColor(new Color(122, 139, 139));
+		
 		for (int i = 0; i < game.getTable().getCloth().getHoles().size(); i++) {
 			int x = (int) game.getTable().getCloth().getHoles().get(i).getX();
 			int y = (int) game.getTable().getCloth().getHoles().get(i).getY();
 			
-			if(i == 0 || i == 2 || i == 3 || i == 4) {
-				x -= Ball.getRadius();
-				y -= Ball.getRadius();
+			if(i == 3) {
+				x -= (Ball.getRadius() + 3);
+				y -= (Ball.getRadius() + 3);
 			}
 			
 			if(i == 1) {
@@ -441,16 +441,23 @@ MouseListener, MouseMotionListener, KeyListener {
 				y += Ball.getRadius() - 35;
 			}
 			
+			if(i == 0) {
+				x -= (Ball.getRadius() + 5);
+				y -= (Ball.getRadius() + 5);
+			}
+			
+			else if(i == 2) {
+				x -= Ball.getRadius();
+				y -= (Ball.getRadius() + 10);
+			}
+			
+			if(i == 4) {
+				x -= (Ball.getRadius() + 3);
+				y -= (Ball.getRadius() + 6);
+			}
+			
 			g.fillOval(x, y, 2 * Cloth.getHoleRadius(), 2 * Cloth.getHoleRadius());
-		}
-		
-		
-		Vector<V2D> holes =  game.getTable().getCloth().getHoles();
-		for (int i = 0; i < holes.size(); ++i) {
-			g.setColor(Color.WHITE);
-			g.fillOval((int)holes.get(i).getX(),(int)holes.get(i).getY(),2,2);
-		}
-	
+		}	
 	}
 
 	private void DrawStick(Graphics g) {
