@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class Game {
@@ -9,7 +11,7 @@ public class Game {
 	private Player p2;
 	private Player activePlayer;
 	private GameState gameState = GameState.WAITING_FOR_HIT;
-	private V2D whiteBallInitalPos;
+	private List<V2D> ballPositions = new ArrayList<>();
 	
 	private boolean areRedsOnTable = true;
 	private int firstBallHit;
@@ -50,10 +52,6 @@ public class Game {
 
 	public void setGameState(GameState gameState) { this.gameState = gameState; }
 	
-	public V2D getWhiteBallInitalPos() { return whiteBallInitalPos; }
-
-	public void setWhiteBallInitalPos(V2D whiteBallInitalPos) { this.whiteBallInitalPos = whiteBallInitalPos; }
-
 	public boolean getAreRedsOnTable() { return areRedsOnTable; }
 	
 	public void setAreRedsOnTable() {
@@ -65,6 +63,14 @@ public class Game {
 		areRedsOnTable = false;
 	}
 	
+	public List<V2D> getBallPositions() {
+		return ballPositions;
+	}
+
+	public void setBallPositions(List<V2D> ballPositions) {
+		this.ballPositions = ballPositions;
+	}
+
 	public void changeActivePlayer() {
 		if (activePlayer == p1)
 			activePlayer = p2;
@@ -136,7 +142,7 @@ public class Game {
 				}
 			}
 			
-			System.out.println(whiteBallInitalPos);
+			//System.out.println(ballPositions.get(0));
 			checkGameFaults();
 			
 			// updating force, velocity and position
@@ -206,7 +212,7 @@ public class Game {
 		
 		if (white.isPotted()) {
 			
-			V2D pos = new V2D(whiteBallInitalPos);
+			V2D pos = new V2D(ballPositions.get(0));
 			System.out.println(pos);
 			
 			while (!validSpot(pos)) {
