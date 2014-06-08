@@ -26,9 +26,9 @@ public class Table {
 			ballSet.addElement(new Ball(BallColor.RED));
 		
 		// adding color balls
+		ballSet.addElement(new Ball(BallColor.YELLOW));
 		ballSet.addElement(new Ball(BallColor.GREEN));
 		ballSet.addElement(new Ball(BallColor.BROWN));
-		ballSet.addElement(new Ball(BallColor.YELLOW));
 		ballSet.addElement(new Ball(BallColor.BLUE));
 		ballSet.addElement(new Ball(BallColor.PINK));
 		ballSet.addElement(new Ball(BallColor.BLACK));

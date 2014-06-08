@@ -123,24 +123,26 @@ MouseListener, MouseMotionListener, KeyListener {
 		}
 
 		// Color Balls
-		// Green Ball
+		// Yellow ball
 		game.getTable().getBallSet()
 		.get(16)
 		.setPosition(
-				(new V2D(greenBallPoint.getX(),
-						greenBallPoint.getY())));
-		// Brown Ball
+				(new V2D(yellowBallPoint.getX(),
+						yellowBallPoint.getY())));
+
+		// Green Ball
 		game.getTable().getBallSet()
 		.get(17)
 		.setPosition(
-				(new V2D(brownBallPoint.getX(),
-						brownBallPoint.getY())));
-		// Yellor Ball
+				(new V2D(greenBallPoint.getX(),
+						greenBallPoint.getY())));
+		
+		// Brown Ball
 		game.getTable().getBallSet()
 		.get(18)
 		.setPosition(
-				(new V2D(yellowBallPoint.getX(),
-						yellowBallPoint.getY())));
+				(new V2D(brownBallPoint.getX(),
+						brownBallPoint.getY())));
 		// Blue Ball
 		game.getTable().getBallSet()
 		.get(19)
@@ -165,9 +167,9 @@ MouseListener, MouseMotionListener, KeyListener {
 		Ball white = game.getTable().getWhiteBall();
 		ballpos.add(new V2D(white.getPosition()));
 		ballpos.add(new V2D());
-		ballpos.add(new V2D(yellowBallPoint));
 		ballpos.add(new V2D(greenBallPoint));
 		ballpos.add(new V2D(brownBallPoint));
+		ballpos.add(new V2D(yellowBallPoint));
 		ballpos.add(new V2D(blueBallPoint));
 		ballpos.add(new V2D(pinkBallPoint));
 		ballpos.add(new V2D(blackBallPoint));
