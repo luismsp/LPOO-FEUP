@@ -15,6 +15,8 @@ public class Game {
 	private int firstBallHit;
 	private boolean newMove = true;
 
+	
+	
 	// -----------
 	// constructor
 	// -----------
@@ -71,10 +73,11 @@ public class Game {
 	}
 
 
-	// -----
-	// other
-	// -----
-
+	
+	// -------
+	// physics
+	// -------
+	
 	public void cueHit() {
 
 		Cue cue = getCue();
@@ -150,17 +153,36 @@ public class Game {
 			gameState = GameState.WAITING_FOR_HIT;
 		
 	}
+	
+	public boolean allStopped() {
+	
+		Vector<Ball> balls = table.getBallSet();
+	
+		for (Ball a : balls)
+			if (a.isMoving())
+				return false;
+	
+		return true;
+	}
 
+
+
+	// --------------
+	// rules / faults
+	// --------------
+	
 	private void checkGameFaults() {
-		boolean foul = false;
+		boolean fault = false;
 		
-		if (repositionWhiteBall())
-			foul = true;
+		if (whiteBallReposition())
+			fault = true;
 		
 		if (invalidBallHit())
-			foul = true;
+			fault = true;
+		
+		colorBallReposition();
 
-		if(foul) {
+		if(fault) {
 			changeTurn();
 			activePlayer.updateScore(4);
 		}
@@ -171,20 +193,14 @@ public class Game {
 		System.out.println(activePlayer.getScore());
 	}
 
-	private void nextMove() {
-		activePlayer.getNextBall(areRedsOnTable, table.getBallSet());
-		newMove = true;
-		firstBallHit = -1;
-	}
-
 	private boolean invalidBallHit() {
 		if (!activePlayer.getValidBalls().contains(firstBallHit))
 			return true;
 	
 		return false;
 	}
-	
-	private boolean repositionWhiteBall() {
+
+	private boolean whiteBallReposition() {
 		Ball white = getTable().getWhiteBall();
 		double r = Ball.getRadius();
 		
@@ -205,8 +221,13 @@ public class Game {
 			return false;
 	}
 
+	private void colorBallReposition() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	private boolean validSpot(V2D pos) {
-
+	
 		final Vector<Ball> balls = getTable().getBallSet();
 		for (Ball a : balls) {
 			Ball temp = new Ball(BallColor.WHITE);
@@ -218,24 +239,24 @@ public class Game {
 		return true;
 	}
 
+	
+	
+	// ------------
+	// player turns
+	// ------------
+
+	private void nextMove() {
+		activePlayer.getNextBall(areRedsOnTable, table.getBallSet());
+		newMove = true;
+		firstBallHit = -1;
+	}
+
 	private void changeTurn() {
 		changeActivePlayer();
 		activePlayer.setLastBallWasRed(false);
 		activePlayer.getNextBall(areRedsOnTable, table.getBallSet());
 		newMove = true;
 		firstBallHit = -1;
-	}
-
-
-	public boolean allStopped() {
-
-		Vector<Ball> balls = table.getBallSet();
-
-		for (Ball a : balls)
-			if (a.isMoving())
-				return false;
-
-		return true;
 	}
 
 }
