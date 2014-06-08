@@ -65,7 +65,7 @@ public class V2D {
 	
 	public void normalize() { multiply(1/norm()); }
 	
-	public static V2D normalize(V2D v1) { return new V2D(V2D.multiply(v1,1/v1.norm())); }
+	public static V2D normalize(V2D v1) { return new V2D(V2D.multiply(v1,1.0/v1.norm())); }
 	
 	public static V2D invertXY(V2D v1) { return new V2D(-v1.x,-v1.y); }
 	

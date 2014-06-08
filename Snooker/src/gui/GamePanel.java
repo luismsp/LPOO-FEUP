@@ -163,14 +163,14 @@ MouseListener, MouseMotionListener, KeyListener {
 		
 		List<V2D> ballpos = game.getBallPositions();
 		Ball white = game.getTable().getWhiteBall();
-		ballpos.add(white.getPosition());
+		ballpos.add(new V2D(white.getPosition()));
 		ballpos.add(new V2D());
-		ballpos.add(yellowBallPoint);
-		ballpos.add(greenBallPoint);
-		ballpos.add(brownBallPoint);
-		ballpos.add(blueBallPoint);
-		ballpos.add(pinkBallPoint);
-		ballpos.add(blackBallPoint);
+		ballpos.add(new V2D(yellowBallPoint));
+		ballpos.add(new V2D(greenBallPoint));
+		ballpos.add(new V2D(brownBallPoint));
+		ballpos.add(new V2D(blueBallPoint));
+		ballpos.add(new V2D(pinkBallPoint));
+		ballpos.add(new V2D(blackBallPoint));
 	}
 
 	public void InitializeDrawingPoints() {

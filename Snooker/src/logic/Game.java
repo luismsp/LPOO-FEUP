@@ -126,13 +126,17 @@ public class Game {
 				if (a.isPotted())
 					continue;
 
+				//Collisions.handleBallCollision(a,balls);
+				
 				Collisions.handleBorderCollision(a,initialClothPosition,finalClothPosition);
 				Ball ball = Collisions.handlePotting(a,holes,potted);
 				if (ball != null) {
 					activePlayer.setBallPotted(ball);
 					potted = true;
 				}
-
+				
+				
+				
 				for (int j = 0; j < balls.size(); ++j) {
 					if (i >= j)
 						continue;
@@ -142,9 +146,14 @@ public class Game {
 						continue;
 
 					int temp = Collisions.handleBallCollision(a,b);
-					if (newMove) {
-						firstBallHit = temp;
-						newMove = false;
+					//System.out.println(temp);
+					
+					if (temp != -1) {
+						if (newMove) {
+							firstBallHit = temp;
+							newMove = false;
+						}
+						break;
 					}
 				}
 			}
@@ -200,10 +209,15 @@ public class Game {
 			activePlayer.updateScore(4);
 		}
 		else {
+			Ball ball = activePlayer.getBallPotted();
+			if (ball == null)
+				return;
+			
+			activePlayer.updateScore(ball.getValue());
 			nextMove();
 		}
 		
-		System.out.println(activePlayer.getScore());
+		//System.out.println(activePlayer.getScore());
 	}
 
 	private boolean invalidBallHit() {
