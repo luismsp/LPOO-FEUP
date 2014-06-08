@@ -287,15 +287,25 @@ MouseListener, MouseMotionListener, KeyListener {
 		
 		g.drawImage(scoreImage, (int) initialWoodPosition.getX() + 480, (int) finalWoodPosition.getY() + 25, scoreImage.getWidth(null), scoreImage.getHeight(null), null);
 		
-		g.setColor(Color.WHITE);
+		g.setColor(Color.BLACK);
 		g.fillOval((int) initialWoodPosition.getX() + 300, (int) finalWoodPosition.getY() + 30, 180, 70);
 		g.fillOval((int) initialWoodPosition.getX() + 580, (int) finalWoodPosition.getY() + 30, 180, 70);
+		
+		if(game.getP1() == game.getActivePlayer())
+			g.setColor(Color.GREEN);
+		else
+			g.setColor(Color.RED);
 		
 		g.drawString(game.getP1().getName(), (int) initialWoodPosition.getX() + 365, (int) finalWoodPosition.getY() + 55);
 		g.drawString("" + game.getP1().getScore(), (int) initialWoodPosition.getX() + 368, (int) finalWoodPosition.getY() + 70);
 		
-		g.drawString(game.getP2().getName(), (int) initialWoodPosition.getX() + 365, (int) finalWoodPosition.getY() + 55);
-		g.drawString("" + game.getP2().getScore(), (int) initialWoodPosition.getX() + 368, (int) finalWoodPosition.getY() + 70);
+		if(game.getP2() == game.getActivePlayer())
+			g.setColor(Color.GREEN);
+		else
+			g.setColor(Color.RED);
+		
+		g.drawString(game.getP2().getName(), (int) initialWoodPosition.getX() + 645, (int) finalWoodPosition.getY() + 55);
+		g.drawString("" + game.getP2().getScore(), (int) initialWoodPosition.getX() + 648, (int) finalWoodPosition.getY() + 70);
 	}
 
 	private void DrawTable(Graphics g) {

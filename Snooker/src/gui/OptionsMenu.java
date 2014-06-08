@@ -1,25 +1,20 @@
 package gui;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JDialog;
-import javax.swing.JRadioButton;
-import javax.swing.JSpinner;
-import javax.swing.JLabel;
-import javax.swing.SpinnerListModel;
-
-import java.awt.Font;
-
-import javax.swing.SwingConstants;
-
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+import javax.swing.SwingConstants;
+import javax.swing.JSlider;
 
 public class OptionsMenu extends JDialog {
 	private static final long serialVersionUID = 1L;
-	String frictionValues[] = new String[20];
 	
 	JLabel frictionLabel;
 	JLabel ballWeightLabel;
@@ -29,7 +24,7 @@ public class OptionsMenu extends JDialog {
 	JButton btnSaveOptions;
 	JButton btnCancelOptions;
 	
-	JSpinner frictionSpinner;
+	double oldValueFriction;
 	
 	public OptionsMenu() {
 		setTitle("LPOO - PYS 1 - Snooker Options");
@@ -55,17 +50,7 @@ public class OptionsMenu extends JDialog {
 		frictionLabel.setBounds(197, 89, 98, 59);
 		getContentPane().add(frictionLabel);
 		
-		for(int i = 0; i < 20; i++) {
-			frictionValues[i] = i+1 + "";
-		}
 		
-		SpinnerListModel fricValues = new SpinnerListModel(frictionValues); 
-		frictionSpinner = new JSpinner(fricValues);
-		frictionSpinner.setFont(new Font("Comic Sans MS", Font.BOLD, 14));
-		frictionSpinner.setAutoscrolls(true);
-		frictionSpinner.setToolTipText("Atrito");
-		frictionSpinner.setBounds(308, 104, 64, 32);
-		getContentPane().add(frictionSpinner);
 	}
 
 	public void SetUpWeightButtons() {
@@ -74,24 +59,24 @@ public class OptionsMenu extends JDialog {
 		ballWeightLabel.setBackground(new Color(255, 255, 0));
 		ballWeightLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		ballWeightLabel.setFont(new Font("Comic Sans MS", Font.BOLD | Font.ITALIC, 16));
-		ballWeightLabel.setBounds(197, 216, 98, 59);
+		ballWeightLabel.setBounds(148, 246, 98, 59);
 		getContentPane().add(ballWeightLabel);
 		
 		ballWeightButtons = new ButtonGroup();
 		JRadioButton heavyWeight = new JRadioButton("Heavy");
 		heavyWeight.setHorizontalAlignment(SwingConstants.CENTER);
-		heavyWeight.setBounds(309, 205, 89, 23);
+		heavyWeight.setBounds(258, 235, 89, 23);
 		getContentPane().add(heavyWeight);
 		
 		JRadioButton normalWeight = new JRadioButton("Normal");
 		normalWeight.setHorizontalAlignment(SwingConstants.CENTER);
-		normalWeight.setBounds(309, 231, 89, 23);
+		normalWeight.setBounds(258, 261, 89, 23);
 		normalWeight.setSelected(true);
 		getContentPane().add(normalWeight);
 		
 		JRadioButton highWeight = new JRadioButton("High");
 		highWeight.setHorizontalAlignment(SwingConstants.CENTER);
-		highWeight.setBounds(309, 257, 89, 23);
+		highWeight.setBounds(258, 287, 89, 23);
 		getContentPane().add(highWeight);
 		
 		ballWeightButtons.add(heavyWeight);
@@ -107,6 +92,12 @@ public class OptionsMenu extends JDialog {
 		btnCancelOptions = new JButton("Cancel");
 		btnCancelOptions.setBounds(308, 438, 108, 38);
 		getContentPane().add(btnCancelOptions);
+		
+		JSlider slider = new JSlider();
+		slider.setMaximum(110);
+		slider.setMinimum(70);
+		slider.setBounds(147, 159, 200, 26);
+		getContentPane().add(slider);
 	}
 
 	public void ManageListeners() {
@@ -114,7 +105,7 @@ public class OptionsMenu extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				setVisible(false);
 				
 			}
@@ -124,7 +115,7 @@ public class OptionsMenu extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent ar0) {
-				// TODO Auto-generated method stub
+				
 				setVisible(false);
 			}
 		});
