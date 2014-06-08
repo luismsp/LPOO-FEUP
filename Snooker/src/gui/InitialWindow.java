@@ -1,11 +1,7 @@
 package gui;
 
-import java.awt.BorderLayout;
-
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
-import javax.swing.border.Border;
 
 public class InitialWindow extends JFrame {
 	private static final long serialVersionUID = 1L;

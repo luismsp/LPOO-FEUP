@@ -152,7 +152,7 @@ public class Game {
 							firstBallHit = temp;
 							newMove = false;
 						}
-						break;
+						//break;
 					}
 				}
 			}
@@ -172,11 +172,8 @@ public class Game {
 			if (allStopped())
 				checkGameFaults();
 		}
-		else			{
-
+		else
 			gameState = GameState.WAITING_FOR_HIT;	
-
-		}
 
 	}
 
@@ -215,7 +212,7 @@ public class Game {
 		}
 		else {
 			Ball ball = activePlayer.getBallPotted();
-			
+
 			if (ball == null) {
 				changeTurn();
 			}

@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -36,7 +35,7 @@ MouseListener, MouseMotionListener, KeyListener {
 	private Image scoreImage;
 
 	private Timer timer;
-	private static final int DESIRED_FPS = 200;
+	private static final int DESIRED_FPS = 100;
 	private static final double dt = 1.0/DESIRED_FPS;
 
 	boolean showGame = false;
@@ -167,9 +166,9 @@ MouseListener, MouseMotionListener, KeyListener {
 		Ball white = game.getTable().getWhiteBall();
 		ballpos.add(new V2D(white.getPosition()));
 		ballpos.add(new V2D());
+		ballpos.add(new V2D(yellowBallPoint));
 		ballpos.add(new V2D(greenBallPoint));
 		ballpos.add(new V2D(brownBallPoint));
-		ballpos.add(new V2D(yellowBallPoint));
 		ballpos.add(new V2D(blueBallPoint));
 		ballpos.add(new V2D(pinkBallPoint));
 		ballpos.add(new V2D(blackBallPoint));
