@@ -17,32 +17,6 @@ public class Collisions {
 		return p1+p2 < r;
 	}
 
-//	public static void handleBallCollision(Ball b1, Vector<Ball> balls) {
-//
-//		for (Ball b2 : balls) {
-//
-//			if (b1 == b2 || !ballsColliding(b1,b2) || !b1.isMoving() || b2.isPotted())
-//				continue;
-//
-//			V2D radii_vector = new V2D(b2.getPosition());
-//			radii_vector.subtract(b1.getPosition());
-//			radii_vector.normalize();
-//
-//			V2D fb2 = new V2D(radii_vector);
-//			fb2.multiply(b1.getForce().norm());
-//			fb2.multiply(V2D.cos(radii_vector,b1.getForce()));
-//			fb2.multiply(RESTITUTION_COEFF);
-//
-//
-//			// new vector for Fa
-//			b1.getForce().add(V2D.invertXY(fb2));
-//
-//			// add the force that b already had
-//			b2.getForce().add(fb2);
-//
-//		}
-//	}
-
 	public static int handleBallCollision(Ball a, Ball b) {
 
 		Ball b1 = a;

@@ -10,20 +10,18 @@ public class Table {
 
 	//
 
-	/*public void setBallSet(Vector<Ball> ballSet) {
-		this.ballSet = ballSet;
-	}*/
+	public Table(double radius, double friction, int holeRadius, double width, double height) {
 
-	public Table(double radius, double friction, BallColor color, int holeRadius, double width, double height) {
-
-		cloth = new Cloth(friction, color, width, height, holeRadius);
+		cloth = new Cloth(friction, width, height, holeRadius);
 
 		// adding white ball to vector
 		ballSet.addElement(new Ball(BallColor.WHITE));
 
 		// adding red balls to vector
-		for(int i = 0; i < 15; i++)
+		for(int i = 0; i < 15; i++) {
 			ballSet.addElement(new Ball(BallColor.RED));
+			//ballSet.get(i+1).setPotted(true);
+		}
 		
 		// adding color balls
 		ballSet.addElement(new Ball(BallColor.YELLOW));

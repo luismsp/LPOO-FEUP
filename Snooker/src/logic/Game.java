@@ -25,7 +25,7 @@ public class Game {
 	// -----------
 
 	public Game(String player1Name, String player2Name) {
-		this.table = new Table(20, 0.99, BallColor.BLACK, 20, 2.54, 1.27);;
+		this.table = new Table(20, 0.99,20, 2.54, 1.27);
 		this.setP1(new Player(player1Name));
 		this.setP2(new Player(player2Name));
 		this.activePlayer = p1;
@@ -200,10 +200,11 @@ public class Game {
 		if (whiteBallReposition())
 			fault = true;
 
-		if (invalidBallHit())
+		boolean invalidHit = invalidBallHit();
+		if (invalidHit)
 			fault = true;
 
-		colorBallReposition();
+		colorBallReposition(invalidHit);
 
 
 		if(fault) {
@@ -221,7 +222,6 @@ public class Game {
 				nextMove();
 			}
 		}	
-
 
 		//System.out.println(activePlayer.getScore());
 	}
@@ -252,7 +252,7 @@ public class Game {
 			return false;
 	}
 
-	private void colorBallReposition() {
+	private void colorBallReposition(boolean invalidHit) {
 		Ball pottedBall = activePlayer.getBallPotted();
 		int pottedValue;
 
@@ -264,14 +264,16 @@ public class Game {
 			if (pottedValue < 2) 
 				return;
 
-			V2D pos = new V2D(ballPositions.get(pottedValue));
-			System.out.println(pos);
+			else if (areRedsOnTable || invalidHit) {
+				V2D pos = new V2D(ballPositions.get(pottedValue));
+				System.out.println(pos);
 
-			while (!validSpot(pos))
-				findNewSpot(pos);
+				while (!validSpot(pos))
+					findNewSpot(pos);
 
-			pottedBall.setPosition(pos);
-			pottedBall.setPotted(false);
+				pottedBall.setPosition(pos);
+				pottedBall.setPotted(false);
+			}
 		}
 
 	}
