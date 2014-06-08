@@ -5,13 +5,17 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 public class Player {
+	
 	private String name;
 	private int score;
-	private int ballToPot = 1;
 	private List<Integer> validBalls = new ArrayList<Integer>();
 	private boolean lastBallWasRed = false;
 	
-	//
+	
+	
+	// -----------
+	// constructor
+	// -----------
 	
 	public Player(String name) {
 		validBalls.add(1);
@@ -19,25 +23,33 @@ public class Player {
 		this.score = 0;
 	}
 	
-	public void setScored(int value) {
-		score += value;
-	}
+		
 	
-	public int getScore() {
-		return score;
-	}
+	// -----------------
+	// getters / setters
+	// -----------------
 	
-	public String getName() {
-		return name;
-	}
-	
-	public int getBallToPot() {
-		return ballToPot;
-	}
+	public List<Integer> getValidBalls() { return validBalls; }
 
-	public void setBallToPot(int ballToPot) {
-		this.ballToPot = ballToPot;
-	}
+	public void setValidBalls(List<Integer> validBalls) { this.validBalls = validBalls; }
+
+	public void setName(String name) { this.name = name; }
+
+	public void setScore(int score) { this.score = score; }
+	
+	public int getScore() { return score; }
+	
+	public String getName() { return name; }
+		
+	public boolean getLastBallWasRed() { return lastBallWasRed; }
+
+	public void setLastBallWasRed(boolean lastBallWasRed) { this.lastBallWasRed = lastBallWasRed; }
+	
+	
+	
+	// -----
+	// other
+	// -----
 	
 	public void updateScore(int score) {
 		if (this.score - score < 0)
@@ -45,15 +57,7 @@ public class Player {
 		else
 			this.score += score;
 	}
-	
-	public boolean isLastBallWasRed() {
-		return lastBallWasRed;
-	}
-
-	public void setLastBallWasRed(boolean lastBallWasRed) {
-		this.lastBallWasRed = lastBallWasRed;
-	}
-	
+		
 	public void getNextBall(boolean areRedsOnTable, Vector<Ball> balls) {
 		
 		if (areRedsOnTable) {

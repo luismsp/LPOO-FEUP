@@ -17,10 +17,10 @@ public class Collisions {
 		return p1+p2 < r;
 	}
 	
-	public static void handleBallCollision(Ball a, Ball b) {
+	public static int handleBallCollision(Ball a, Ball b) {
 		
 		if (!ballsColliding(a,b) || !a.isMoving())
-			return;
+			return -1;
 			
 		
 		System.out.println("COLLIDED!");
@@ -47,7 +47,8 @@ public class Collisions {
 		
 		System.out.println("A "+a.getForce());
 		System.out.println("B "+b.getForce());
-
+		
+		return b.getValue();
 	}
 	
 	public static void handleBorderCollision(Ball a, V2D initialClothPosition, V2D finalClothPosition) {

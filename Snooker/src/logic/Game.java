@@ -10,7 +10,10 @@ public class Game {
 	private Player activePlayer;
 	private GameState gameState = GameState.WAITING_FOR_HIT;
 	private V2D whiteBallInitalPos;
+	
 	private boolean areRedsOnTable = true;
+	private int firstBallHit;
+	private boolean newMove = true;
 
 	// -----------
 	// constructor
@@ -122,7 +125,11 @@ public class Game {
 					if (b.isPotted())
 						continue;
 
-					Collisions.handleBallCollision(a,b);
+					int temp = Collisions.handleBallCollision(a,b);
+					if (newMove) {
+						firstBallHit = temp;
+						newMove = false;
+					}
 				}
 			}
 			
@@ -150,7 +157,7 @@ public class Game {
 		if (repositionWhiteBall())
 			foul = true;
 		
-		if (invalidBall())
+		if (invalidBallHit())
 			foul = true;
 
 		if(foul) {
@@ -164,15 +171,16 @@ public class Game {
 		System.out.println(activePlayer.getScore());
 	}
 
-
 	private void nextMove() {
 		activePlayer.getNextBall(areRedsOnTable, table.getBallSet());
+		newMove = true;
+		firstBallHit = -1;
 	}
 
-
-	private boolean invalidBall() {
-		// TODO
-		
+	private boolean invalidBallHit() {
+		if (!activePlayer.getValidBalls().contains(firstBallHit))
+			return true;
+	
 		return false;
 	}
 	
@@ -214,6 +222,8 @@ public class Game {
 		changeActivePlayer();
 		activePlayer.setLastBallWasRed(false);
 		activePlayer.getNextBall(areRedsOnTable, table.getBallSet());
+		newMove = true;
+		firstBallHit = -1;
 	}
 
 
