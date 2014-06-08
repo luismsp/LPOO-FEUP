@@ -108,12 +108,15 @@ MouseListener, MouseMotionListener, KeyListener {
 		double ballX;
 		double ballY;
 		for (int columns = 0; columns < 5; columns++) {
-			ballX = (upVertexTriangle.getX() - 2 * ballRadius) - (columns * 2 * ballRadius) + ballRadius;
+			ballX = (upVertexTriangle.getX() - 2 * ballRadius) - (columns * 2 * ballRadius) + ballRadius - 3;
 			ballY = upVertexTriangle.getY() + (2 * ballRadius) + 3 + (columns * ballRadius);
 
+			if(columns != 0)
+				ballX += 3*columns;
+			
 			for (int balls = 0; balls < ballsPerColumns; balls++) {
 				game.getTable().getBallSet().get(indexBall).setPosition(new V2D(ballX, ballY));
-				ballY += 2*ballRadius;
+				ballY += 2*ballRadius + 1;
 				indexBall++;
 			}
 			ballsPerColumns--;
