@@ -11,13 +11,20 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
-import javax.swing.JSlider;
+
+import logic.Ball;
 
 public class OptionsMenu extends JDialog {
 	private static final long serialVersionUID = 1L;
 	
+	GamePanel game;
+	
 	JLabel frictionLabel;
 	JLabel ballWeightLabel;
+	
+	JRadioButton lowFriction;
+	JRadioButton normalFriction;
+	JRadioButton highFriction;
 	
 	JRadioButton lightWeight;
 	JRadioButton normalWeight;
@@ -26,14 +33,17 @@ public class OptionsMenu extends JDialog {
 	JButton btnSaveOptions;
 	JButton btnCancelOptions;
 	
-	JSlider frictionSlider;
+	boolean oldLowFriction;
+	boolean oldNormalFriction;
+	boolean oldHighFriction;
 	
-	int oldValueFriction;
 	boolean oldLightValue;
 	boolean oldNormalValue;
 	boolean oldHeavyValue;
 	
-	public OptionsMenu() {
+	public OptionsMenu(GamePanel game) {
+		this.game = game;
+		
 		getContentPane().setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		getContentPane().setForeground(Color.GREEN);
 		setTitle("LPOO - PYS 1 - Snooker Options");
@@ -42,11 +52,14 @@ public class OptionsMenu extends JDialog {
 		getContentPane().setBackground(new Color(0, 191, 255));
 		getContentPane().setLayout(null);
 		
-		SetUpFrictionSpinner();
+		SetUpFrictionButtons();
 		SetUpWeightButtons();
 		SetUpSaveCancelButtons();
 		
-		oldValueFriction = frictionSlider.getValue();
+		oldLowFriction = lowFriction.isSelected();
+		oldNormalFriction = normalFriction.isSelected();
+		oldHighFriction = highFriction.isSelected();
+		
 		oldLightValue = lightWeight.isSelected();
 		oldNormalValue = normalWeight.isSelected();
 		oldHeavyValue = heavyWeight.isSelected();
@@ -54,34 +67,39 @@ public class OptionsMenu extends JDialog {
 		ManageListeners();
 	}
 	
-	public void SetUpFrictionSpinner() {
+	public void SetUpFrictionButtons() {
+		ButtonGroup frictionButtons = new ButtonGroup();
+		
 		frictionLabel = new JLabel("Friction");
 		frictionLabel.setOpaque(true);
 		frictionLabel.setBackground(new Color(0, 255, 0));
 		frictionLabel.setForeground(new Color(0, 0, 0));
 		frictionLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		frictionLabel.setFont(new Font("Comic Sans MS", Font.BOLD | Font.ITALIC, 16));
-		frictionLabel.setBounds(243, 89, 98, 59);
+		frictionLabel.setBounds(171, 91, 98, 59);
 		getContentPane().add(frictionLabel);
 		
-		frictionSlider = new JSlider();
-		frictionSlider.setMajorTickSpacing(10);
-		frictionSlider.setPaintLabels(true);
-		frictionSlider.setPaintTicks(true);
-		frictionSlider.setMinorTickSpacing(1);
-		frictionSlider.setToolTipText("Decimals");
-		frictionSlider.setMaximum(110);
-		frictionSlider.setMinimum(70);
-		frictionSlider.setBounds(192, 159, 200, 50);
-		frictionSlider.setValue(99);
-		frictionSlider.setBackground(new Color(0, 191, 255));
-		frictionSlider.setForeground(Color.BLACK);
-		getContentPane().add(frictionSlider);
+		lowFriction = new JRadioButton("Low");
+		lowFriction.setBounds(275, 82, 109, 23);
+		getContentPane().add(lowFriction);
+		
+		normalFriction = new JRadioButton("Normal");
+		normalFriction.setBounds(275, 108, 109, 23);
+		normalFriction.setSelected(true);
+		getContentPane().add(normalFriction);
+		
+		highFriction = new JRadioButton("High");
+		highFriction.setBounds(275, 134, 109, 23);
+		getContentPane().add(highFriction);
+		
+		frictionButtons.add(lowFriction);
+		frictionButtons.add(normalFriction);
+		frictionButtons.add(highFriction);
 	}
 
 	public void SetUpWeightButtons() {
 		
-		ButtonGroup ballWeightButtons;
+		ButtonGroup ballWeightButtons = new ButtonGroup();
 		
 		ballWeightLabel = new JLabel("Ball Weight");
 		ballWeightLabel.setOpaque(true);
@@ -90,8 +108,6 @@ public class OptionsMenu extends JDialog {
 		ballWeightLabel.setFont(new Font("Comic Sans MS", Font.BOLD | Font.ITALIC, 16));
 		ballWeightLabel.setBounds(171, 251, 98, 59);
 		getContentPane().add(ballWeightLabel);
-		
-		ballWeightButtons = new ButtonGroup();
 		
 		lightWeight = new JRadioButton("Light");
 		lightWeight.setHorizontalAlignment(SwingConstants.CENTER);
@@ -129,7 +145,7 @@ public class OptionsMenu extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+				updateGameValues();
 				setVisible(false);
 			}
 		});
@@ -138,12 +154,32 @@ public class OptionsMenu extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent ar0) {
-				frictionSlider.setValue(oldValueFriction);
+				lowFriction.setSelected(oldLowFriction);
+				normalFriction.setSelected(oldNormalFriction);
+				highFriction.setSelected(oldHighFriction);
+				
 				lightWeight.setSelected(oldLightValue);
 				normalWeight.setSelected(oldNormalValue);
 				heavyWeight.setSelected(oldHeavyValue);
 				setVisible(false);
 			}
 		});
+	}
+
+	public void updateGameValues() {
+		
+		if(lowFriction.isSelected())
+			game.getGame().getTable().getCloth().setFriction(0.993);
+		else if(normalFriction.isSelected())
+			game.getGame().getTable().getCloth().setFriction(0.99);
+		else
+			game.getGame().getTable().getCloth().setFriction(0.95);
+		
+		if(lightWeight.isSelected())
+			Ball.setMass(0.08);
+		else if(normalWeight.isSelected())
+			Ball.setMass(0.17);
+		else
+			Ball.setMass(0.35);
 	}
 }

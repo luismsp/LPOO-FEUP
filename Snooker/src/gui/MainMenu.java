@@ -25,7 +25,7 @@ public class MainMenu extends JFrame {
 	private final JButton btnCredits = new JButton("Credits");
 
 	GamePanel game = new GamePanel();
-	OptionsMenu optionsMenu = new OptionsMenu();
+	OptionsMenu optionsMenu = new OptionsMenu(game);
 
 
 	public MainMenu() {
