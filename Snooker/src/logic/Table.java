@@ -18,17 +18,23 @@ public class Table {
 		ballSet.addElement(new Ball(BallColor.WHITE));
 
 		// adding red balls to vector
-		for(int i = 0; i < 15; i++) {
+		int i = 0;
+		for(; i < 15; i++) {
 			ballSet.addElement(new Ball(BallColor.RED));
-			ballSet.get(i+1).setPotted(true);
+			//ballSet.get(i+1).setPotted(true);
 		}
 		
 		// adding color balls
 		ballSet.addElement(new Ball(BallColor.YELLOW));
+		//ballSet.get(++i).setPotted(true);
 		ballSet.addElement(new Ball(BallColor.GREEN));
+		//ballSet.get(++i).setPotted(true);
 		ballSet.addElement(new Ball(BallColor.BROWN));
+		//ballSet.get(++i).setPotted(true);
 		ballSet.addElement(new Ball(BallColor.BLUE));
+		//ballSet.get(++i).setPotted(true);
 		ballSet.addElement(new Ball(BallColor.PINK));
+		//ballSet.get(++i).setPotted(true);
 		ballSet.addElement(new Ball(BallColor.BLACK));
 		
 		cue = Cue.getInstance();

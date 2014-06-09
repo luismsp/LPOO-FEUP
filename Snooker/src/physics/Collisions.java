@@ -1,6 +1,7 @@
-package logic;
+package physics;
 
 import java.util.Vector;
+import logic.*;
 
 public class Collisions {
 

@@ -14,7 +14,6 @@ import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -26,15 +25,16 @@ import logic.Cloth;
 import logic.Game;
 import logic.GameState;
 import logic.Pair;
+import logic.Player;
 import logic.V2D;
 
 public class GamePanel extends JPanel implements ActionListener, Runnable,
 MouseListener, MouseMotionListener, KeyListener {
 	private static final long serialVersionUID = 1L;
-	
+
 	private MainMenu mainWindow;
 	private JPanel mainMenu;
-	
+
 	private Image cueImage;
 	private List<Image> ballImages = new ArrayList<>();
 	private Image scoreImage;
@@ -44,7 +44,6 @@ MouseListener, MouseMotionListener, KeyListener {
 	private static final double dt = 1.0/DESIRED_FPS;
 
 	private Game game;
-	private boolean gameOver;
 
 	private V2D initialWoodPosition;
 	private V2D finalWoodPosition;
@@ -80,8 +79,8 @@ MouseListener, MouseMotionListener, KeyListener {
 
 		this.mainWindow = mainWindow;
 		this.mainMenu = mainMenu;
-		
-		this.game = new Game("Botas", "Luis");
+
+		this.game = new Game("Joao", "Luis");
 
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -101,7 +100,6 @@ MouseListener, MouseMotionListener, KeyListener {
 
 		InitializeDrawingPoints();
 		InitializeBallsPoints();
-		gameOver = false;
 		timer = new Timer(1000 / DESIRED_FPS, (ActionListener) this);
 		timer.start();
 		setVisible(true);
@@ -258,6 +256,7 @@ MouseListener, MouseMotionListener, KeyListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		GameState gs = game.getGameState();
 
 		if (gs == GameState.TARGET_SELECTED)
@@ -270,46 +269,42 @@ MouseListener, MouseMotionListener, KeyListener {
 				//System.out.println("inside if");
 			}
 
-			else
-				game.updatePhysics(dt,initialClothPosition,finalWoodPosition);
-		}
-
-		if(verifyingEndGame() && !gameOver) {
-			gameOver = true;
-			String winnerPlayer = new String();
-			int winnerScore = 0;
-			if(game.getP1().getScore() > game.getP2().getScore()) {
-				winnerPlayer = game.getP1().getName();
-				winnerScore = game.getP1().getScore();
-			}
-				
 			else {
-				winnerPlayer = game.getP2().getName();
-				winnerScore = game.getP2().getScore();
+				if (game.gameOver()) {
+
+					String winnerPlayer = new String();
+					int winnerScore = 0;
+					Player winner;
+
+					if(game.getP1().getScore() >= game.getP2().getScore())
+						winner = game.getP1();
+
+					else
+						winner = game.getP2();
+
+					winnerPlayer = winner.getName();
+					winnerScore = winner.getScore();
+
+					JOptionPane.showMessageDialog(this, winnerPlayer + " is the winner", "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
+					Pair w = new Pair(winnerPlayer, winnerScore);
+					if (game.getRanking() != null)
+						game.getRanking().addElement(w);
+
+					game.getRanking().save();
+
+					this.game = new Game("Joao", "Luis");
+					mainWindow.add(mainMenu);
+					mainMenu.setVisible(true);
+					setVisible(false);
+
+				}
+				else 
+					game.updatePhysics(dt,initialClothPosition,finalWoodPosition);
 			}
-			
-			JOptionPane.showMessageDialog(this, winnerPlayer + " is the winner", "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
-			Pair winner = new Pair(winnerPlayer, winnerScore);
-			game.getRanking().addElement(winner);
-			
-			//TODO Exports Ranking to file
-			
-			this.game = new Game("Botas", "Luis");
-			mainWindow.add(mainMenu);
-			mainMenu.setVisible(true);
-			setVisible(false);
-			
+	
 		}
 
 		repaint();
-	}
-
-	private boolean verifyingEndGame() {
-		Vector<Ball> balls = game.getTable().getBallSet();
-		for(int i = 1; i < balls.size(); i++)
-			if(!balls.get(i).isPotted())
-				return false;
-		return true;
 	}
 
 	public void paintComponent(Graphics g) {
@@ -612,6 +607,7 @@ MouseListener, MouseMotionListener, KeyListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+
 		if (game.getGameState() == GameState.WAITING_FOR_HIT) {
 			calculateRotation(e.getX(), e.getY());
 		}

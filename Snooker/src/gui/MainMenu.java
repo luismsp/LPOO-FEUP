@@ -107,7 +107,7 @@ public class MainMenu extends JFrame {
 				String toCheckedP2 = new String();
 
 				while(!checkName1) {
-					toCheckedP1 = JOptionPane.showInputDialog("Insert Name: Player 1");
+					toCheckedP1 = JOptionPane.showInputDialog(mainPanel, "Insert Name: Player 1");
 
 					if(toCheckedP1 != null) {
 						if(toCheckedP1.length() > 10 || toCheckedP1.equals("")) {
@@ -123,7 +123,7 @@ public class MainMenu extends JFrame {
 
 				if(checkName1)
 					while(!checkName2) {
-						toCheckedP2 = JOptionPane.showInputDialog("Insert Name: Player 2");
+						toCheckedP2 = JOptionPane.showInputDialog(mainPanel, "Insert Name: Player 2");
 
 						if(toCheckedP2 != null) {
 							if(toCheckedP2.length() > 10 || toCheckedP2.equals("")) {
@@ -171,7 +171,10 @@ public class MainMenu extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(mainPanel, game.getGame().getRanking().toString(), "Ranking", JOptionPane.INFORMATION_MESSAGE);
+				if (game.getGame().getRanking() != null)
+					JOptionPane.showMessageDialog(mainPanel, game.getGame().getRanking().toString(), "Ranking", JOptionPane.INFORMATION_MESSAGE);
+				else
+					JOptionPane.showMessageDialog(mainPanel,"No information available!","Ranking",JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 

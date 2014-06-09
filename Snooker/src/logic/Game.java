@@ -3,6 +3,7 @@ package logic;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import physics.*;
 
 public class Game {
 
@@ -12,14 +13,15 @@ public class Game {
 	private Player activePlayer;
 	private GameState gameState = GameState.WAITING_FOR_HIT;
 	private List<V2D> ballPositions = new ArrayList<>();
-	
-	private Ranking ranking = new Ranking();
 
-	private boolean areRedsOnTable = false;
+	private static Ranking ranking = new Ranking();
+
+	private boolean areRedsOnTable = true;
 	private int firstBallHit;
 	private boolean newMove = true;
 	private boolean potted = false;
 
+	private boolean gameOver = false;
 
 
 	// -----------
@@ -32,7 +34,9 @@ public class Game {
 		this.setP2(new Player(player2Name));
 		this.activePlayer = p1;
 		
-		//TODO Load Ranking file here
+		ranking = ranking.load();
+		if (ranking == null)
+			ranking = new Ranking();
 	}
 
 
@@ -89,6 +93,12 @@ public class Game {
 		return ranking;
 	}
 
+	public boolean gameOver() {
+		return gameOver;
+	}
+
+	
+
 	// -------
 	// physics
 	// -------
@@ -121,7 +131,6 @@ public class Game {
 		Vector<Ball> balls = table.getBallSet();
 		Vector<V2D> holes = table.getCloth().getHoles();
 		double frictionMod = table.getCloth().getFriction();
-
 
 		if (!allStopped()) {
 
@@ -178,9 +187,22 @@ public class Game {
 			if (allStopped())
 				checkGameFaults();
 		}
-		else
-			gameState = GameState.WAITING_FOR_HIT;	
+		else 
+			gameState = GameState.WAITING_FOR_HIT;
+		
+		if (verifyGameOver()) {
+			checkGameFaults();
+			gameOver = true;
+		}
+			
+	}
 
+	private boolean verifyGameOver() {
+		Vector<Ball> balls = getTable().getBallSet();
+		for(int i = 1; i < balls.size(); i++)
+			if(!balls.get(i).isPotted())
+				return false;
+		return true;
 	}
 
 	public boolean allStopped() {

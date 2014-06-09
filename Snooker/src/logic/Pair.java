@@ -1,6 +1,10 @@
 package logic;
 
-public class Pair implements Comparable<Pair>{
+import java.io.Serializable;
+
+public class Pair implements Comparable<Pair>, Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	String name;
 	int score;
 
@@ -20,14 +24,14 @@ public class Pair implements Comparable<Pair>{
 	@Override
 	public int compareTo(Pair other) {
 		if(this.score > other.score)
-			return 1;
+			return -1;
 		else if(this.score == other.score) {
 			if(this.name.compareTo(other.name) > -1)
-				return 1;
-			else
 				return -1;
+			else
+				return 1;
 		}
 		else
-			return -1;
+			return 1;
 	}
 }

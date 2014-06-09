@@ -9,7 +9,7 @@ public class Player {
 	private String name;
 	private int score;
 	private List<Integer> validBalls = new ArrayList<Integer>();
-	private boolean lastBallWasRed = true;
+	private boolean lastBallWasRed = false;
 	private Ball ballPotted = null;
 	
 	
