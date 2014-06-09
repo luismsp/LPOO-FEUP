@@ -22,12 +22,9 @@ public class Collisions {
 		Ball b1 = a;
 		Ball b2 = b;
 
-		if (!ballsColliding(a,b))
+		if (!ballsColliding(a,b) || (!a.isMoving() && !b.isMoving()))
 			return -1;
 		
-		if ((!a.isMoving() && !b.isMoving()))
-			return -1;
-
 		if (!a.isMoving()) {
 			b1 = b;
 			b2 = a;
@@ -63,19 +60,18 @@ public class Collisions {
 
 	public static void handleBorderCollision(Ball a, V2D initialClothPosition, V2D finalClothPosition) {
 
-		// TODO: atribuir valores das coordenadas do pano
 		// para definir correctamente os limites
-		double uplimit = initialClothPosition.getY();
-		double leftlimit = initialClothPosition.getX();
+		double uplimit = initialClothPosition.getY()+2;
+		double leftlimit = initialClothPosition.getX()+2;
 		double rightlimit = finalClothPosition.getX()+65;
-		double downlimit = finalClothPosition.getY()-Ball.getRadius()-5;
+		double downlimit = finalClothPosition.getY()-Ball.getRadius()-7;
 		double r = Ball.getRadius();
 
-		if (a.getY()-r < uplimit || a.getY()+r > downlimit)
-			a.setForce(V2D.invertY(a.getForce()));
+		if (a.getY()-r <= uplimit || a.getY()+r >= downlimit)
+			a.getForce().invertY();
 
-		else if (a.getX()-r < leftlimit || a.getX()+r > rightlimit)
-			a.setForce(V2D.invertX(a.getForce()));
+		else if (a.getX()-r <= leftlimit || a.getX()+r >= rightlimit)
+			a.getForce().invertX();
 
 	}
 

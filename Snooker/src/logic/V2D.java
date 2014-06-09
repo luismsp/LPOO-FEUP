@@ -71,10 +71,10 @@ public class V2D {
 	
 	public void invertXY() { x *= -1; y *= -1; }
 	
-	public static V2D invertX(V2D v1) { return new V2D(-v1.x,v1.y); }
+	public void invertX() { x *= -1; }
 	
-	public static V2D invertY(V2D v1) { return new V2D(v1.x,-v1.y); }
-	
+	public void invertY() { y *= -1; }
+		
 	public void multiply(double n) { x *= n; y *= n; }
 	
 	public static double dotProduct(V2D v1, V2D v2) { return (v1.x*v2.x + v1.y*v2.y); }
