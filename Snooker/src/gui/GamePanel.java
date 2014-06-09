@@ -83,6 +83,10 @@ MouseListener, MouseMotionListener, KeyListener {
 		setDoubleBuffered(true);
 		requestFocus();
 	}
+	
+	public Game getGame() {
+		return game;
+	}
 
 	public void Init() throws IOException {
 		loadImages();
