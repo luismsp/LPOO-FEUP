@@ -12,6 +12,8 @@ public class Game {
 	private Player activePlayer;
 	private GameState gameState = GameState.WAITING_FOR_HIT;
 	private List<V2D> ballPositions = new ArrayList<>();
+	
+	private Ranking ranking = new Ranking();
 
 	private boolean areRedsOnTable = false;
 	private int firstBallHit;
@@ -29,6 +31,8 @@ public class Game {
 		this.setP1(new Player(player1Name));
 		this.setP2(new Player(player2Name));
 		this.activePlayer = p1;
+		
+		//TODO Load Ranking file here
 	}
 
 
@@ -81,7 +85,9 @@ public class Game {
 			activePlayer = p1;
 	}
 
-
+	public Ranking getRanking() {
+		return ranking;
+	}
 
 	// -------
 	// physics

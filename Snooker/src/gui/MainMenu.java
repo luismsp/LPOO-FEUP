@@ -6,11 +6,15 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import logic.Ranking;
 
 public class MainMenu extends JFrame {
 
@@ -26,6 +30,8 @@ public class MainMenu extends JFrame {
 
 	GamePanel game = new GamePanel(mainPanel, this);
 	OptionsMenu optionsMenu = new OptionsMenu(game);
+
+	List<Ranking> ranking = new ArrayList<Ranking>();
 
 
 	public MainMenu() {
@@ -165,7 +171,7 @@ public class MainMenu extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				JOptionPane.showMessageDialog(mainPanel, game.getGame().getRanking().toString(), "Ranking", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 

@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -26,13 +25,14 @@ import logic.Ball;
 import logic.Cloth;
 import logic.Game;
 import logic.GameState;
+import logic.Pair;
 import logic.V2D;
 
 public class GamePanel extends JPanel implements ActionListener, Runnable,
 MouseListener, MouseMotionListener, KeyListener {
 	private static final long serialVersionUID = 1L;
 	
-	private JFrame mainWindow;
+	private MainMenu mainWindow;
 	private JPanel mainMenu;
 	
 	private Image cueImage;
@@ -74,7 +74,7 @@ MouseListener, MouseMotionListener, KeyListener {
 		scoreImage = ImageIO.read(this.getClass().getResource("res/Score.png"));
 	}
 
-	public GamePanel(JPanel mainMenu, JFrame mainWindow) {
+	public GamePanel(JPanel mainMenu, MainMenu mainWindow) {
 		setLocation((Utilities.dimScreen.width - getWidth()) / 2,
 				(Utilities.dimScreen.height - getHeight()) / 2);
 
@@ -277,12 +277,22 @@ MouseListener, MouseMotionListener, KeyListener {
 		if(verifyingEndGame() && !gameOver) {
 			gameOver = true;
 			String winnerPlayer = new String();
-			if(game.getP1().getScore() > game.getP2().getScore())
+			int winnerScore = 0;
+			if(game.getP1().getScore() > game.getP2().getScore()) {
 				winnerPlayer = game.getP1().getName();
-			else
+				winnerScore = game.getP1().getScore();
+			}
+				
+			else {
 				winnerPlayer = game.getP2().getName();
+				winnerScore = game.getP2().getScore();
+			}
 			
 			JOptionPane.showMessageDialog(this, winnerPlayer + " is the winner", "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
+			Pair winner = new Pair(winnerPlayer, winnerScore);
+			game.getRanking().addElement(winner);
+			
+			//TODO Exports Ranking to file
 			
 			this.game = new Game("Botas", "Luis");
 			mainWindow.add(mainMenu);
@@ -592,7 +602,6 @@ MouseListener, MouseMotionListener, KeyListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub		
 
 		if (game.getGameState() == GameState.TARGET_SELECTED) {
 			game.cueHit();
@@ -631,42 +640,35 @@ MouseListener, MouseMotionListener, KeyListener {
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 
 	}
 
