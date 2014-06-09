@@ -13,7 +13,7 @@ public class Game {
 	private GameState gameState = GameState.WAITING_FOR_HIT;
 	private List<V2D> ballPositions = new ArrayList<>();
 
-	private boolean areRedsOnTable = true;
+	private boolean areRedsOnTable = false;
 	private int firstBallHit;
 	private boolean newMove = true;
 	private boolean potted = false;

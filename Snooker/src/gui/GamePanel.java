@@ -14,8 +14,11 @@ import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -28,7 +31,10 @@ import logic.V2D;
 public class GamePanel extends JPanel implements ActionListener, Runnable,
 MouseListener, MouseMotionListener, KeyListener {
 	private static final long serialVersionUID = 1L;
-
+	
+	private JFrame mainWindow;
+	private JPanel mainMenu;
+	
 	private Image cueImage;
 	private List<Image> ballImages = new ArrayList<>();
 	private Image scoreImage;
@@ -37,9 +43,8 @@ MouseListener, MouseMotionListener, KeyListener {
 	private static final int DESIRED_FPS = 100;
 	private static final double dt = 1.0/DESIRED_FPS;
 
-	boolean showGame = false;
-
 	private Game game;
+	private boolean gameOver;
 
 	private V2D initialWoodPosition;
 	private V2D finalWoodPosition;
@@ -69,11 +74,14 @@ MouseListener, MouseMotionListener, KeyListener {
 		scoreImage = ImageIO.read(this.getClass().getResource("res/Score.png"));
 	}
 
-	public GamePanel() {
+	public GamePanel(JPanel mainMenu, JFrame mainWindow) {
 		setLocation((Utilities.dimScreen.width - getWidth()) / 2,
 				(Utilities.dimScreen.height - getHeight()) / 2);
 
-		game = new Game("Botas", "Luis");
+		this.mainWindow = mainWindow;
+		this.mainMenu = mainMenu;
+		
+		this.game = new Game("Botas", "Luis");
 
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -83,7 +91,7 @@ MouseListener, MouseMotionListener, KeyListener {
 		setDoubleBuffered(true);
 		requestFocus();
 	}
-	
+
 	public Game getGame() {
 		return game;
 	}
@@ -93,6 +101,7 @@ MouseListener, MouseMotionListener, KeyListener {
 
 		InitializeDrawingPoints();
 		InitializeBallsPoints();
+		gameOver = false;
 		timer = new Timer(1000 / DESIRED_FPS, (ActionListener) this);
 		timer.start();
 		setVisible(true);
@@ -115,7 +124,7 @@ MouseListener, MouseMotionListener, KeyListener {
 
 			if(columns != 0)
 				ballX += 3*columns;
-			
+
 			for (int balls = 0; balls < ballsPerColumns; balls++) {
 				game.getTable().getBallSet().get(indexBall).setPosition(new V2D(ballX, ballY));
 				ballY += 2*ballRadius + 1;
@@ -138,7 +147,7 @@ MouseListener, MouseMotionListener, KeyListener {
 		.setPosition(
 				(new V2D(greenBallPoint.getX(),
 						greenBallPoint.getY())));
-		
+
 		// Brown Ball
 		game.getTable().getBallSet()
 		.get(18)
@@ -163,8 +172,8 @@ MouseListener, MouseMotionListener, KeyListener {
 		.setPosition(
 				(new V2D(blackBallPoint.getX(),
 						blackBallPoint.getY())));
-		
-		
+
+
 		List<V2D> ballpos = game.getBallPositions();
 		Ball white = game.getTable().getWhiteBall();
 		ballpos.add(new V2D(white.getPosition()));
@@ -229,47 +238,68 @@ MouseListener, MouseMotionListener, KeyListener {
 		// Cloth Holes
 		// Left Up Hole
 		game.getTable().getCloth().addHole(new V2D(initialClothPosition.getX(), initialClothPosition.getY()));
-		
+
 		// Left Bottom Hole
 		game.getTable().getCloth().addHole(new V2D(initialClothPosition.getX() - 1, finalClothPosition.getY()+60));
-		
+
 		// Up Center Hole
 		game.getTable().getCloth().addHole(new V2D(blueBallPoint.getX(), initialClothPosition.getY()-6));
-		
+
 		// Bottom Center Hole
 		game.getTable().getCloth().addHole(new V2D(blueBallPoint.getX() + 3, finalClothPosition.getY()+((finalWoodPosition.getY()-finalClothPosition.getY())/2) + 26));
-		
+
 		// Right Up Hole
 		game.getTable().getCloth().addHole(new V2D(finalClothPosition.getX() + 98 + (finalWoodPosition.getX() - finalClothPosition.getX()) / 2, initialClothPosition.getY()));
-		
+
 		// Right Bottom Hole
 		game.getTable().getCloth().addHole(new V2D(finalClothPosition.getX() + 98 + (finalWoodPosition.getX()-finalClothPosition.getX())/2, finalClothPosition.getY() + 61));
 
 	}
 
-	public void start() {
-		(new Thread(this)).start();
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		GameState gs = game.getGameState();
-		
+
 		if (gs == GameState.TARGET_SELECTED)
 			game.getCue().updateOffset();
-		
+
 		else if (gs == GameState.HIT_DONE) {
-			
+
 			if (game.allStopped()) {
 				game.setGameState(GameState.WAITING_FOR_HIT);
 				//System.out.println("inside if");
 			}
-				
+
 			else
 				game.updatePhysics(dt,initialClothPosition,finalWoodPosition);
 		}
+
+		if(verifyingEndGame() && !gameOver) {
+			gameOver = true;
+			String winnerPlayer = new String();
+			if(game.getP1().getScore() > game.getP2().getScore())
+				winnerPlayer = game.getP1().getName();
+			else
+				winnerPlayer = game.getP2().getName();
 			
+			JOptionPane.showMessageDialog(this, winnerPlayer + " is the winner", "Congratulations!", JOptionPane.INFORMATION_MESSAGE);
+			
+			this.game = new Game("Botas", "Luis");
+			mainWindow.add(mainMenu);
+			mainMenu.setVisible(true);
+			setVisible(false);
+			
+		}
+
 		repaint();
+	}
+
+	private boolean verifyingEndGame() {
+		Vector<Ball> balls = game.getTable().getBallSet();
+		for(int i = 1; i < balls.size(); i++)
+			if(!balls.get(i).isPotted())
+				return false;
+		return true;
 	}
 
 	public void paintComponent(Graphics g) {
@@ -280,34 +310,34 @@ MouseListener, MouseMotionListener, KeyListener {
 	private void Draw(Graphics g) {
 		DrawTable(g);
 		DrawBalls(g, Ball.getRadius());
-		
+
 		DrawBoardScore(g);
-		
+
 		if (game.getGameState() != GameState.HIT_DONE)
 			DrawStick(g);
 	}
 
 	private void DrawBoardScore(Graphics g) {
-		
+
 		g.drawImage(scoreImage, (int) initialWoodPosition.getX() + 480, (int) finalWoodPosition.getY() + 25, scoreImage.getWidth(null), scoreImage.getHeight(null), null);
-		
+
 		g.setColor(Color.BLACK);
 		g.fillOval((int) initialWoodPosition.getX() + 300, (int) finalWoodPosition.getY() + 30, 180, 70);
 		g.fillOval((int) initialWoodPosition.getX() + 580, (int) finalWoodPosition.getY() + 30, 180, 70);
-		
+
 		if(game.getP1() == game.getActivePlayer())
 			g.setColor(Color.GREEN);
 		else
 			g.setColor(Color.RED);
-		
+
 		g.drawString(game.getP1().getName(), (int) initialWoodPosition.getX() + 365, (int) finalWoodPosition.getY() + 55);
 		g.drawString("" + game.getP1().getScore(), (int) initialWoodPosition.getX() + 368, (int) finalWoodPosition.getY() + 70);
-		
+
 		if(game.getP2() == game.getActivePlayer())
 			g.setColor(Color.GREEN);
 		else
 			g.setColor(Color.RED);
-		
+
 		g.drawString(game.getP2().getName(), (int) initialWoodPosition.getX() + 645, (int) finalWoodPosition.getY() + 55);
 		g.drawString("" + game.getP2().getScore(), (int) initialWoodPosition.getX() + 648, (int) finalWoodPosition.getY() + 70);
 	}
@@ -402,64 +432,64 @@ MouseListener, MouseMotionListener, KeyListener {
 		g.fillArc((int) game.getTable().getCloth().getHoles().get(0).getX() - 27,
 				(int) game.getTable().getCloth().getHoles().get(0).getY() - 27,
 				2 * 27, 2 * 27, 0, 270);
-		
+
 		g.fillArc((int) game.getTable().getCloth().getHoles().get(1).getX() - 26,
 				(int) game.getTable().getCloth().getHoles().get(1).getY() - 26,
 				2 * 27, 2 * 27, 90, 270);
-		
+
 		g.fillArc((int) game.getTable().getCloth().getHoles().get(2).getX() - 22,
 				(int) game.getTable().getCloth().getHoles().get(2).getY() - 34,
 				2 * 27, 2 * 40, 0, 180);
-		
+
 		g.fillArc((int) game.getTable().getCloth().getHoles().get(3).getX() - 25,
 				(int) game.getTable().getCloth().getHoles().get(3).getY() - 46,
 				2 * 27, 2 * 40, 180, 180);
-		
+
 		g.fillArc((int) game.getTable().getCloth().getHoles().get(4).getX() - 25,
 				(int) game.getTable().getCloth().getHoles().get(4).getY() - 27,
 				2 * 27, 2 * 27, 270, 270);
-		
+
 		g.fillArc((int) game.getTable().getCloth().getHoles().get(5).getX() - 26,
 				(int) game.getTable().getCloth().getHoles().get(5).getY() - 27,
 				2 * 27, 2 * 27, 180, 270);
 
 		// Drawing Holes
 		g.setColor(new Color(122, 139, 139));
-		
+
 		for (int i = 0; i < game.getTable().getCloth().getHoles().size(); i++) {
 			int x = (int) game.getTable().getCloth().getHoles().get(i).getX();
 			int y = (int) game.getTable().getCloth().getHoles().get(i).getY();
-			
+
 			if(i == 3) {
 				x -= (Ball.getRadius() + 3);
 				y -= (Ball.getRadius() + 3);
 			}
-			
+
 			if(i == 1) {
 				x -= Ball.getRadius() + 3;
 				y += Ball.getRadius() - 35;
 			}
-			
+
 			if(i == 5) {
 				x -= Ball.getRadius() + 5;
 				y += Ball.getRadius() - 35;
 			}
-			
+
 			if(i == 0) {
 				x -= (Ball.getRadius() + 5);
 				y -= (Ball.getRadius() + 5);
 			}
-			
+
 			else if(i == 2) {
 				x -= Ball.getRadius();
 				y -= (Ball.getRadius() + 10);
 			}
-			
+
 			if(i == 4) {
 				x -= (Ball.getRadius() + 3);
 				y -= (Ball.getRadius() + 6);
 			}
-			
+
 			g.fillOval(x, y, 2 * Cloth.getHoleRadius(), 2 * Cloth.getHoleRadius());
 		}	
 	}
@@ -485,7 +515,7 @@ MouseListener, MouseMotionListener, KeyListener {
 
 		game.getCue().setPosition(new V2D((cx + cueImage.getWidth(null)*Math.cos(Math.toRadians(game.getCue().getRotation()))), 
 				(cy + cueImage.getWidth(null) * Math.sin(Math.toRadians(game.getCue().getRotation())))));
-		
+
 		//System.out.println("Cue X: " + game.getCue().getPosition().getX() + "     Cue Y: " + game.getCue().getPosition().getY() + "\n");
 		//System.out.println("CX: " + cx + "      CY: " + cy + "\n");
 		//System.out.println("XCorrection: " + xCorrection + "      YCorrection: " + yCorrection + "\n");
@@ -548,7 +578,7 @@ MouseListener, MouseMotionListener, KeyListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (game.getGameState() == GameState.WAITING_FOR_HIT) {
-			
+
 			switch (e.getButton()) {
 			case MouseEvent.BUTTON1:
 				//mouseDown = true;
@@ -563,7 +593,7 @@ MouseListener, MouseMotionListener, KeyListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub		
-		
+
 		if (game.getGameState() == GameState.TARGET_SELECTED) {
 			game.cueHit();
 			game.getCue().resetOffset();
@@ -592,52 +622,52 @@ MouseListener, MouseMotionListener, KeyListener {
 			if (game.getCue().getRotation() < 0)
 				game.getCue().setRotation(360);
 			break;
-			}
+		}
 		repaint();
 		//System.out.println("Cue alpha: " + game.getCue().getRotation());
 	}
-	
+
 	//
-	
+
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

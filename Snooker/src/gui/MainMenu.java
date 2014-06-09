@@ -24,7 +24,7 @@ public class MainMenu extends JFrame {
 	private final JButton btnRanking = new JButton("Ranking");
 	private final JButton btnCredits = new JButton("Credits");
 
-	GamePanel game = new GamePanel();
+	GamePanel game = new GamePanel(mainPanel, this);
 	OptionsMenu optionsMenu = new OptionsMenu(game);
 
 
@@ -105,7 +105,7 @@ public class MainMenu extends JFrame {
 
 					if(toCheckedP1 != null) {
 						if(toCheckedP1.length() > 10 || toCheckedP1.equals("")) {
-							JOptionPane.showMessageDialog(null, "Insert a name with maximum of 10 letters.");
+							JOptionPane.showMessageDialog(mainPanel, "Insert a name with maximum of 10 letters.");
 							checkName1 = false;
 						}
 						else
@@ -121,7 +121,7 @@ public class MainMenu extends JFrame {
 
 						if(toCheckedP2 != null) {
 							if(toCheckedP2.length() > 10 || toCheckedP2.equals("")) {
-								JOptionPane.showMessageDialog(null, "Insert a name with maximum of 10 letters.");
+								JOptionPane.showMessageDialog(mainPanel, "Insert a name with maximum of 10 letters.");
 								checkName2 = false;
 							}
 							else
@@ -149,7 +149,6 @@ public class MainMenu extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				optionsMenu.setVisible(true);
 			}
 		});
@@ -158,8 +157,7 @@ public class MainMenu extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-
+				JOptionPane.showMessageDialog(mainPanel, Utilities.rulesStr, "Rules", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 
@@ -167,7 +165,6 @@ public class MainMenu extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -176,8 +173,7 @@ public class MainMenu extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-
+				JOptionPane.showMessageDialog(mainPanel, "            João Pereira\n               Luís Pina", "Credits", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 	}

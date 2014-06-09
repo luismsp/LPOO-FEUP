@@ -20,7 +20,7 @@ public class Table {
 		// adding red balls to vector
 		for(int i = 0; i < 15; i++) {
 			ballSet.addElement(new Ball(BallColor.RED));
-			//ballSet.get(i+1).setPotted(true);
+			ballSet.get(i+1).setPotted(true);
 		}
 		
 		// adding color balls
